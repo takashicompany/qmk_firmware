@@ -27,8 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PRODUCT      tkbd05
 
 /* key matrix size */
-#define MATRIX_ROWS 4
-#define MATRIX_COLS 5*2
+#define MATRIX_ROWS 4*2
+#define MATRIX_COLS 5
 
 /*
  * Keyboard Matrix Assignments
