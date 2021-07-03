@@ -21,3 +21,5 @@ RGBLIGHT_ENABLE = yes        # Enable keyboard RGB underglow
 BLUETOOTH_ENABLE = no       # Enable Bluetooth
 AUDIO_ENABLE = no           # Audio output
 SPLIT_KEYBOARD=yes
+#define ENCODER_RESOLUTION 4
+ENCODER_ENABLE = yes 
