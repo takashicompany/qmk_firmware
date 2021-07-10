@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
+#include <stdio.h>
 
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
@@ -60,6 +61,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
 };
 
+static int count = 0;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case QMKBEST:
@@ -79,13 +82,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
     }
+
+    count++;
+
     return true;
 }
 
 #ifdef OLED_DRIVER_ENABLE
+
+
 void oled_task_user(void) {
-    // Host Keyboard Layer Status
-    oled_write_P(PSTR("Layer: "), false);
+    // Host Keyboard Layer Status    
+    char fn_str[12];
+    snprintf(fn_str, sizeof(fn_str), "%d", count);
+
+    oled_write_P(PSTR("EndZone34 "), false);
+    oled_write_P(fn_str, false);
 
     // switch (get_highest_layer(layer_state)) {
     //     case _QWERTY:
