@@ -16,11 +16,7 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
-// Defines the keycodes used by our macros in process_record_user
-enum custom_keycodes {
-    QMKBEST = SAFE_RANGE,
-    QMKURL
-};
+static uint16_t press_count = 0;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -61,63 +57,53 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
 };
 
-static int count = 0;
+oled_rotation_t oled_init_user(oled_rotation_t rotation) {
+    return OLED_ROTATION_270;  // flips the display 180 degrees if offhand
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case QMKBEST:
-            if (record->event.pressed) {
-                // when keycode QMKBEST is pressed
-                SEND_STRING("QMK is the best thing ever!");
-            } else {
-                // when keycode QMKBEST is released
-            }
-            break;
-        case QMKURL:
-            if (record->event.pressed) {
-                // when keycode QMKURL is pressed
-                SEND_STRING("https://qmk.fm/\n");
-            } else {
-                // when keycode QMKURL is released
-            }
-            break;
-    }
 
-    count++;
+    if (record->event.pressed) {
+        press_count++;
+    }
 
     return true;
 }
 
 #ifdef OLED_DRIVER_ENABLE
 
+static void render_logo(void) {
+  static const char PROGMEM my_logo[] = {
+    // Paste the code from the previous step below this line!
+    0x00, 0x00, 0x00, 0xff, 0x01, 0x01, 0x39, 0x29, 0x29, 0x29, 0x29, 0x29, 0xe9, 0x0f, 0x00, 0x00, 
+    0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xf8, 0x08, 0xf8, 0x00, 0x00, 0x00, 0x00, 
+    0x80, 0x80, 0x80, 0xbf, 0xa0, 0xa0, 0xa7, 0xa5, 0xa5, 0xa5, 0xa5, 0x25, 0x25, 0x3c, 0x00, 0x1f, 
+    0x20, 0x3e, 0x02, 0x3e, 0x20, 0x1f, 0x20, 0x2e, 0x2a, 0x2e, 0x20, 0x1f, 0x00, 0x00, 0x00, 0x00, 
+    0x87, 0x44, 0x24, 0x14, 0x0c, 0x00, 0xc0, 0xa0, 0x90, 0x88, 0x87, 0x00, 0xe0, 0x10, 0xd0, 0x50, 
+    0xd0, 0x10, 0xe0, 0x10, 0xd0, 0x50, 0xd0, 0x10, 0xe0, 0x10, 0xd0, 0x50, 0x50, 0x10, 0xf0, 0x00, 
+    0x07, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x07, 0x00, 0x03, 0x04, 0x05, 0x05, 
+    0x05, 0x04, 0x03, 0x04, 0x07, 0x00, 0x07, 0x04, 0x03, 0x04, 0x05, 0x05, 0x05, 0x05, 0x07, 0x00
+  };
+
+  oled_write_raw_P(my_logo, sizeof(my_logo));
+}
 
 void oled_task_user(void) {
-    // Host Keyboard Layer Status    
-    char fn_str[12];
-    snprintf(fn_str, sizeof(fn_str), "%d", count);
 
-    oled_write_P(PSTR("EndZone34 "), false);
-    oled_write_P(fn_str, false);
+    render_logo();
+    oled_set_cursor(0, 5);
 
-    // switch (get_highest_layer(layer_state)) {
-    //     case _QWERTY:
-    //         oled_write_P(PSTR("Default\n"), false);
-    //         break;
-    //     case _FN:
-    //         oled_write_P(PSTR("FN\n"), false);
-    //         break;
-    //     case _ADJ:
-    //         oled_write_P(PSTR("ADJ\n"), false);
-    //         break;
-    //     default:
-    //         // Or use the write_ln shortcut over adding '\n' to the end of your string
-    //         oled_write_ln_P(PSTR("Undefined"), false);
-    // }
+    oled_write_ln_P(PSTR("Layer"), false);
+    char layer_str[12];
+    snprintf(layer_str, sizeof(layer_str), "%d", get_highest_layer(layer_state));
+    oled_write_ln(layer_str, false);
 
-    // Host Keyboard LED Status
-    led_t led_state = host_keyboard_led_state();
-    oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
-    oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
-    oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
+    oled_write_ln_P(PSTR(" "), false);
+
+    oled_write_ln_P(PSTR("Count"), false);
+    char count_str[24];
+    snprintf(count_str, sizeof(count_str), "%d", press_count);
+    oled_write_ln(count_str, false);
+    
 }
 #endif
