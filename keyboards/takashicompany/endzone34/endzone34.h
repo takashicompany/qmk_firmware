@@ -37,6 +37,3 @@
     { k21, k22, k23, k24, k25, k26, k27, k28, k29, k30 }, \
     { KC_NO, KC_NO, KC_NO, k31, k32, k33, k34, KC_NO, KC_NO, KC_NO } \
 }
-
-// キーを押した回数を格納する変数
-extern uint16_t press_count;
