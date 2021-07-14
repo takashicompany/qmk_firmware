@@ -17,7 +17,7 @@
 #include "endzone34.h"
 #include <stdio.h>
 
-uint16_t press_count = 0;
+static uint16_t press_count = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
      // キーが押されたら、カウンターをインクリメントする
