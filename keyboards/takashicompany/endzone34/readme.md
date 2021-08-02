@@ -2,7 +2,8 @@
 
 ![endzone34](https://github.com/takashicompany/endzone34/blob/master/images/main_qmk.jpg?raw=true)
 
-*A short description of the keyboard/project*
+A simple yet fun to use 30% keyboard.
+Also supports MX sockets and OLED.
 
 * Keyboard Maintainer: [takashicompany](https://github.com/takashicompany)
 * Hardware Supported: EndZone34 PCB, Pro Micro
