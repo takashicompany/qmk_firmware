@@ -26,12 +26,28 @@
  * The second converts the arguments into a two-dimensional array which
  * represents the switch matrix.
  */
+
+
 #define LAYOUT( \
-    k00, k01, k02, k03, k04, k05, \
-    k10, k11, k12, k13, k14, k15, \
-    k20, k21, k22, k23, k24, k25  \
+    l01, l02, l03, l04, l05, l16, \
+    l06, l07, l08, l09, l10, l17, \
+    l11, l12, l13, l14, l15, l18  \
 ) { \
-    { k00, k01, k02, k03, k04, k05 }, \
-    { k10, k11, k12, k13, k14, k15 }, \
-    { k20, k21, k22, k23, k24, k25 }  \
+    { l01, l03, l05, l02, l04, l06}, \
+    { l16, l08, l02, l06, l04, l05 }, \
+    { l11, l12, l13, l14, l15, l18 }  \
 }
+
+
+
+/*
+#define LAYOUT( \
+    l01, l02, l03, l04, l05, l16, \
+    l06, l07, l08, l09, l10, l17, \
+    l11, l12, l13, l14, l15, l18  \
+) { \
+    { l01, l02, l03, l04, l05, l16 }, \
+    { l06, l07, l08, l09, l10, l17 }, \
+    { l11, l12, l13, l14, l15, l18 }  \
+}
+*/
