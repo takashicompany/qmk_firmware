@@ -26,6 +26,8 @@
  * The second converts the arguments into a two-dimensional array which
  * represents the switch matrix.
  */
+
+ /*
 #define LAYOUT( \
     l01, l02, l03, l04, l05, \
     l06, l07, l08, l09, l10, \
@@ -35,4 +37,16 @@
     { l01, l03, l05, l02, l04, l16 }, \
     { l06, l08, l10, l07, l09, l17 }, \
     { l11, l13, l15, l12, l14, l18 }  \
+}
+*/
+
+#define LAYOUT( \
+    l01, l02, l03, l04, l05, r01, r02, r03, r04, r05, \
+    l06, l07, l08, l09, l10, r06, r07, r08, r09, r10, \
+    l11, l12, l13, l14, l15, r11, r12, r13, r14, r15, \
+    l16, l17, l18, r16, r17, r18, \
+) { \
+    { l01, l03, l05, l02, l04, l16, r01, r03, r05, r02, r04, r16 }, \
+    { l06, l08, l10, l07, l09, l17, r06, r08, r10, r07, r09, r17 }, \
+    { l11, l13, l15, l12, l14, l18, r11, r13, r15, r12, r14, r18 }  \
 }
