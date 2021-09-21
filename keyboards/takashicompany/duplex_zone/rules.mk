@@ -22,3 +22,8 @@ AUDIO_ENABLE = no           # Audio output
 
 CUSTOM_MATRIX = yes
 SRC += matrix.c
+
+ENCODER_ENABLE = yes
+
+OLED_ENABLE = yes
+OLED_DRIVER = SSD1306
