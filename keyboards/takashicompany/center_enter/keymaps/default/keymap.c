@@ -62,6 +62,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     register_code(KC_LANG2);
                     is_lang1 = true;
                 }
+            }
             break;
         case KC_LANG1:
             if (record->event.pressed) {
