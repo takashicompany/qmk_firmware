@@ -15,6 +15,11 @@
  */
 #include QMK_KEYBOARD_H
 
+// Defines the keycodes used by our macros in process_record_user
+enum custom_keycodes {
+    SWITCH_LANG
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // LAYOUT(
     //     KC_1, KC_Q, KC_W, KC_E, KC_R, KC_T,       KC_Y, KC_U, KC_I, KC_O, KC_P,
@@ -23,9 +28,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ),
     
     LAYOUT(
-        KC_TAB, LT(2, KC_Q), KC_W, KC_E, KC_R, KC_T,                KC_Y, KC_U, KC_I, KC_O, KC_P,
-        KC_LCTL, KC_A, KC_S, LT(2, KC_D), KC_F, KC_G,               RGB_TOG, KC_H, KC_J, LT(2, KC_K), KC_L, KC_ENT,
-        KC_LSFT, KC_Z, GUI_T(KC_X), ALT_T(KC_C), LT(1, KC_V), KC_B, KC_SPC, KC_N, LT(1, KC_M), KC_COMM, CTL_T(KC_DOT), KC_BSPC
+        KC_TAB, LT(2, KC_Q), KC_W, KC_E, KC_R, KC_T,                         KC_Y, KC_U, KC_I, KC_O, ALT_T(KC_P),
+        KC_LCTL, KC_A, KC_S, LT(2, KC_D), KC_F, KC_G,               SWITCH_LANG, KC_H, KC_J, LT(2, KC_K), KC_L, KC_ENT,
+        KC_LSFT, KC_Z, GUI_T(KC_X), ALT_T(KC_C), LT(1, KC_V), KC_B, KC_SPC,  KC_N, LT(1, KC_M), KC_COMM, CTL_T(KC_DOT), KC_BSPC
     ),
 
     LAYOUT(
@@ -47,3 +52,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      )
     
 };
+bool is_lang1 = false;
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case SWITCH_LANG:
+            if (record->event.pressed) {
+
+                if (is_lang1) {
+                    register_code(KC_LANG1);
+                    is_lang1 = false;
+                }
+                else {
+                    register_code(KC_LANG2);
+                    is_lang1 = true;
+                }
+                
+            } else {
+                // when keycode QMKBEST is released
+            }
+            break;
+        case KC_LANG1:
+            if (record->event.pressed) {
+                is_lang1 = false;
+            }
+            break;
+
+        case KC_LANG2:
+            if (record->event.pressed) {
+                is_lang1 = true;
+            }
+            break;
+    }
+    return true;
+}
