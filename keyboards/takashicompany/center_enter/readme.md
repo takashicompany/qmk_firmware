@@ -1,20 +1,20 @@
-# center_enter
+# Center x Enter
 
-![center_enter](imgur.com image replace me!)
+![image](https://raw.githubusercontent.com/takashicompany/center-enter/master/images/qmk.jpg)
 
 *A short description of the keyboard/project*
 
-* Keyboard Maintainer: [takashicompany](https://github.com/yourusername)
-* Hardware Supported: *The PCBs, controllers supported*
-* Hardware Availability: *Links to where you can find this hardware*
+* Keyboard Maintainer: [takashicompany](https://github.com/takashicompany)
+* Hardware Supported: Center x Enter PCB, Pro Micro
+* Hardware Availability: https://github.com/takashicompany/center-enter
 
 Make example for this keyboard (after setting up your build environment):
 
-    make center_enter:default
+    make takashicompany/center_enter:default
 
 Flashing example for this keyboard:
 
-    make center_enter:default:flash
+    make takashicompany/center_enter:default:flash
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
 
