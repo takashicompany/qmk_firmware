@@ -31,7 +31,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     LAYOUT(
         KC_TRNS, KC_1, KC_2, KC_3, KC_4, KC_5,                          KC_6, KC_7, KC_8, KC_9, KC_0,
         KC_TRNS, KC_EQL, KC_LBRC, KC_SLSH, KC_MINS, KC_RO,     KC_TRNS, KC_SCLN, KC_QUOT, KC_RBRC, KC_NUHS, KC_JYEN,
-        KC_TRNS, KC_LSFT, KC_LGUI, KC_LALT, KC_LANG2, KC_LSFT, KC_TRNS,  KC_SPC, KC_LANG1, KC_TRNS, KC_TRNS, KC_DEL
+        KC_TRNS, KC_LSFT, KC_LGUI, KC_LALT, KC_LANG2, KC_LSFT, KC_TRNS, KC_SPC, KC_LANG1, KC_TRNS, KC_TRNS, KC_DEL
     ),
 
     LAYOUT(
@@ -80,6 +80,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
+    
     if (clockwise) {
         tap_code(KC_MS_WH_UP);
     } else {
