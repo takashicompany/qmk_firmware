@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PRODUCT_ID   0x0014
 #define DEVICE_VER   0x0001
 #define MANUFACTURER takashicompany
-#define PRODUCT      Compact Zone
+#define PRODUCT      Compacx
 
 /* key matrix size */
 #define MATRIX_ROWS 5 * 2
