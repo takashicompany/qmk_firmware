@@ -1,20 +1,22 @@
-# compact_zone
+# Compacx
 
-![compact_zone](imgur.com image replace me!)
+![image](https://github.com/takashicompany/compacx/blob/master/images/qmk.jpg?raw=true)
 
-*A short description of the keyboard/project*
+"Compacx" is a 35-key keyboard with an ISO enter key.
+It is the perfect size for a macro pad or a one-handed gaming keyboard.
+It can also be used as a split keyboard by combining two units.
 
-* Keyboard Maintainer: [takashicompany](https://github.com/yourusername)
-* Hardware Supported: *The PCBs, controllers supported*
-* Hardware Availability: *Links to where you can find this hardware*
+* Keyboard Maintainer: [takashicompany](https://github.com/takashicompany)
+* Hardware Supported: PCB, Pro Micro
+* Hardware Availability: https://github.com/takashicompany/compacx
 
 Make example for this keyboard (after setting up your build environment):
 
-    make compact_zone:default
+    make takashicompany/compacx:default
 
 Flashing example for this keyboard:
 
-    make compact_zone:default:flash
+    make takashicompany/compacx:default:flash
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
 
