@@ -1,20 +1,24 @@
 # radialex
 
-![radialex](imgur.com image replace me!)
+![Radialex](https://github.com/takashicompany/radialex/blob/master/images/qmk.jpg?raw=true)
 
-*A short description of the keyboard/project*
+40% larger keyboard.  
+The radial key layout allows you to place your hand in a natural position and move your fingers the shortest distance to type.  
+Your iconic keys and keycaps can be placed in the center of the keyboard.  
+It is possible to make it shine with LED backlighting.  
+The keyswitches can also be replaced with MX sockets.  
 
 * Keyboard Maintainer: [takashicompany](https://github.com/yourusername)
-* Hardware Supported: *The PCBs, controllers supported*
-* Hardware Availability: *Links to where you can find this hardware*
+* Hardware Supported: PCB, Pro Micro
+* Hardware Availability: https://github.com/takashicompany/radialex
 
 Make example for this keyboard (after setting up your build environment):
 
-    make radialex:default
+    make takashicompany/radialex:default
 
 Flashing example for this keyboard:
 
-    make radialex:default:flash
+    make takashicompany/radialex:default:flash
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
 
