@@ -24,13 +24,15 @@
 #include "debug.h"
 #include "matrix.h"
 
+typedef uint16_t matrix_col_t;
+
 /*
  *     col: { B11, B10, B2, B1, A7, B0 }
  *     row: { A10, A9, A8, B15, C13, C14, C15, A2 }
  */
 /* matrix state(1:on, 0:off) */
 static matrix_row_t matrix[MATRIX_ROWS];
-static matrix_row_t matrix_debouncing[MATRIX_COLS];
+static matrix_col_t matrix_debouncing[MATRIX_COLS];
 static bool         debouncing      = false;
 static uint16_t     debouncing_time = 0;
 
@@ -43,7 +45,7 @@ __attribute__((weak)) void matrix_init_kb(void) { matrix_init_user(); }
 __attribute__((weak)) void matrix_scan_kb(void) { matrix_scan_user(); }
 
 void matrix_init(void) {
-    printf("matrix init\n");
+    dprintf("matrix init\n");
     // debug_matrix = true;
 
     // actual matrix setup
@@ -66,7 +68,7 @@ void matrix_init(void) {
     palSetPadMode(GPIOA, 6, PAL_MODE_INPUT_PULLDOWN);
 
     memset(matrix, 0, MATRIX_ROWS * sizeof(matrix_row_t));
-    memset(matrix_debouncing, 0, MATRIX_COLS * sizeof(matrix_row_t));
+    memset(matrix_debouncing, 0, MATRIX_COLS * sizeof(matrix_col_t));
 
     matrix_init_quantum();
 }
@@ -74,7 +76,7 @@ void matrix_init(void) {
 uint8_t matrix_scan(void) {
     // actual matrix
     for (int col = 0; col < MATRIX_COLS; col++) {
-        matrix_row_t data = 0;
+        matrix_col_t data = 0;
 
         // strobe col { B11, B10, B2, B1, A7, B0 }
         switch (col) {
@@ -153,16 +155,16 @@ bool matrix_is_on(uint8_t row, uint8_t col) { return (matrix[row] & (1 << col));
 matrix_row_t matrix_get_row(uint8_t row) { return matrix[row]; }
 
 void matrix_print(void) {
-    printf("\nr/c 01234567\n");
+    dprintf("\nr/c 01234567\n");
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
-        printf("%X0: ", row);
+        dprintf("%X0: ", row);
         matrix_row_t data = matrix_get_row(row);
         for (int col = 0; col < MATRIX_COLS; col++) {
             if (data & (1 << col))
-                printf("1");
+                dprintf("1");
             else
-                printf("0");
+                dprintf("0");
         }
-        printf("\n");
+        dprintf("\n");
     }
 }
