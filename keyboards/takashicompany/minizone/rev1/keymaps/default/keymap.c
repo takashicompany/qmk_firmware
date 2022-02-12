@@ -3,6 +3,11 @@
 
 #include QMK_KEYBOARD_H
 
+#include "paw3204.h"
+#include "pointing_device.h"
+
+report_mouse_t mouse_rep;
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     LAYOUT(
@@ -29,3 +34,38 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RGB_M_K, RGB_M_X, RGB_M_G, RGB_M_T, RGB_M_T, KC_F11, KC_F12, KC_CAPS, KC_NO, KC_NO,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS)
 };
+
+void matrix_init_user() { init_paw3204(); }
+
+void matrix_scan_user() {
+    static int  cnt;
+    static bool paw_ready;
+    if (cnt++ % 50 == 0) {
+        uint8_t pid = read_pid_paw3204();
+        if (pid == 0x30) {
+            dprint("paw3204 OK\n");
+            paw_ready = true;
+        } else {
+            dprintf("paw3204 NG:%d\n", pid);
+            paw_ready = false;
+        }
+    }
+
+    if (paw_ready) {
+        uint8_t stat;
+        int8_t x, y;
+
+        read_paw3204(&stat, &x, &y);
+        mouse_rep.buttons = 0;
+        mouse_rep.h       = 0;
+        mouse_rep.v       = 0;
+        mouse_rep.x       = y;
+        mouse_rep.y       = -x;
+
+        dprintf("stat:0x%02x x:%4d y:%4d\n", stat, mouse_rep.x, mouse_rep.y);
+
+        if (stat & 0x80) {
+            pointing_device_set_report(mouse_rep);
+        }
+    }
+}
