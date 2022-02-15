@@ -95,7 +95,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS)
 };
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+/*    switch (keycode) {
+        case KC_00:
+            if (record->event.pressed) {
+                SEND_STRING("00");
+            }
+            return false;
+    }*/
+    return true;
+}
+
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  debug_enable=true;
+  debug_matrix=true;
+  //debug_keyboard=true;
+  //debug_mouse=true;
+}
+
 void matrix_init_user() { init_paw3204(); }
+
+int counter;
 
 void matrix_scan_user() {
     static int  cnt;
@@ -103,10 +124,10 @@ void matrix_scan_user() {
     if (cnt++ % 50 == 0) {
         uint8_t pid = read_pid_paw3204();
         if (pid == 0x30) {
-            dprint("paw3204 OK\n");
+            //dprint("paw3204 OK\n");
             paw_ready = true;
         } else {
-            dprintf("paw3204 NG:%d\n", pid);
+            //dprintf("paw3204 NG:%d\n", pid);
             paw_ready = false;
         }
     }
@@ -122,10 +143,25 @@ void matrix_scan_user() {
         mouse_rep.x       = y;
         mouse_rep.y       = -x;
 
-        dprintf("stat:0x%02x x:%4d y:%4d\n", stat, mouse_rep.x, mouse_rep.y);
+        // dprintf("stat:0x%02x x:%4d y:%4d\n", stat, mouse_rep.x, mouse_rep.y);
 
         if (stat & 0x80) {
+            counter = 1000;
             pointing_device_set_report(mouse_rep);
+            layer_on(5);
+        }
+        else
+        {
+            if (counter > 0)
+            {
+                counter--;
+                if (counter == 0)
+                {
+                    layer_off(5);
+                     dprintf("off\n");
+                }
+            }
+           
         }
     }
 }
