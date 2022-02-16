@@ -8,6 +8,12 @@
 
 report_mouse_t mouse_rep;
 
+bool mouseStartFlag;
+uint16_t mouseStartTimer;
+
+bool mouseEndFlag;
+uint16_t mouseEndTimer;
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     LAYOUT(
@@ -96,6 +102,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+    if (keycode ==  KC_MS_BTN1)
+    {
+
+    }
+    else
+    {
+        if  (record->event.pressed)
+        {
+            mouseStartFlag = false;
+            mouseEndFlag = false;
+            layer_off(5);
+            dprintf("cancel\n");
+        }
+    }
+
 /*    switch (keycode) {
         case KC_00:
             if (record->event.pressed) {
@@ -117,6 +139,11 @@ void keyboard_post_init_user(void) {
 void matrix_init_user() { init_paw3204(); }
 
 int counter;
+
+uint16_t mouseCounter;
+uint16_t mouseTimer;
+
+
 
 void matrix_scan_user() {
     static int  cnt;
@@ -146,21 +173,38 @@ void matrix_scan_user() {
         // dprintf("stat:0x%02x x:%4d y:%4d\n", stat, mouse_rep.x, mouse_rep.y);
 
         if (stat & 0x80) {
-            counter = 1000;
+            
             pointing_device_set_report(mouse_rep);
-            layer_on(5);
+
+            if (mouseStartFlag) {
+                if (timer_elapsed(mouseStartTimer) > 50) {
+                    layer_on(5);
+                    mouseEndTimer = timer_read();
+                    mouseEndFlag = true;
+                }
+            } else {
+                mouseStartTimer = timer_read();
+                mouseStartFlag = true;
+            }
         }
         else
         {
-            if (counter > 0)
-            {
-                counter--;
-                if (counter == 0)
-                {
-                    layer_off(5);
-                     dprintf("off\n");
-                }
+            mouseStartFlag = false;
+            if (mouseEndFlag && timer_elapsed(mouseEndTimer) > 1000) {
+                mouseEndFlag = false;
+                layer_off(5);
             }
+
+
+            // if (counter > 0)
+            // {
+            //     counter--;
+            //     if (counter == 0)
+            //     {
+            //         layer_off(5);
+            //          dprintf("off\n");
+            //     }
+            // }
            
         }
     }
