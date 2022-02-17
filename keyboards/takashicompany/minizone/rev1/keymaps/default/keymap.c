@@ -14,6 +14,17 @@ uint16_t mouseStartTimer;
 bool mouseEndFlag;
 uint16_t mouseEndTimer;
 
+enum click_state {
+    NONE = 0,
+    WAIT_CLICK,
+    CLICKABLE
+};
+
+enum click_state state;
+uint16_t click_timer;
+
+uint16_t click_layer = 9;
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     LAYOUT(
@@ -69,12 +80,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RGB_M_P, RGB_M_B, RGB_M_R, RGB_M_SW, RGB_M_SN, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, 
         RGB_M_K, RGB_M_X, RGB_M_G, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, 
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
+    ),
+
+     LAYOUT(
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
+    ),
+
+    LAYOUT(
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MS_BTN1, KC_MS_BTN2, KC_WH_U, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_WH_D, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     )
+
+
+
+
+   
 
 // [KC_NO,BLE_DIS,BLE_EN,SEL_BLE,USB_DIS,USB_EN,SEL_USB,KC_NO,KC_NO,BATT_LV,
 // ADV_ID0,ADV_ID1,ADV_ID2,ADV_ID3,ADV_ID4,ADV_ID5,ADV_ID6,ADV_ID7,AD_WO_L,KC_NO,
 // ENT_DFU,ENT_WEB,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_TRNS,
 // KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS]]}
+        
 
     // LAYOUT(
     //     LT(2, KC_Q), KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P,
@@ -105,15 +136,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     if (keycode ==  KC_MS_BTN1)
     {
-
+        dprintf("click: %d \n", record->event.pressed);
     }
     else
     {
         if  (record->event.pressed)
         {
-            mouseStartFlag = false;
-            mouseEndFlag = false;
-            layer_off(5);
+            state = NONE;
+            layer_off(click_layer);
             dprintf("cancel\n");
         }
     }
@@ -176,36 +206,38 @@ void matrix_scan_user() {
             
             pointing_device_set_report(mouse_rep);
 
-            if (mouseStartFlag) {
-                if (timer_elapsed(mouseStartTimer) > 50) {
-                    layer_on(5);
-                    mouseEndTimer = timer_read();
-                    mouseEndFlag = true;
+            if (state == WAIT_CLICK) {
+                if (timer_elapsed(click_timer) > 50) {
+                    layer_on(click_layer);
+                    click_timer = timer_read();
+                    state = CLICKABLE;
                 }
             } else {
-                mouseStartTimer = timer_read();
-                mouseStartFlag = true;
+                click_timer = timer_read();
+                state = WAIT_CLICK;
             }
+
+            // if (mouseStartFlag) {
+            //     if (timer_elapsed(mouseStartTimer) > 50) {
+            //         layer_on(5);
+            //         mouseEndTimer = timer_read();
+            //         mouseEndFlag = true;
+            //     }
+            // } else {
+            //     mouseStartTimer = timer_read();
+            //     mouseStartFlag = true;
+            // }
         }
         else
         {
-            mouseStartFlag = false;
-            if (mouseEndFlag && timer_elapsed(mouseEndTimer) > 1000) {
-                mouseEndFlag = false;
-                layer_off(5);
+            if (state == CLICKABLE) {
+                if (timer_elapsed(click_timer) > 1000) {
+                    state = NONE;
+                    layer_off(click_layer);
+                }
+            } else {
+                state = NONE;
             }
-
-
-            // if (counter > 0)
-            // {
-            //     counter--;
-            //     if (counter == 0)
-            //     {
-            //         layer_off(5);
-            //          dprintf("off\n");
-            //     }
-            // }
-           
         }
     }
 }
