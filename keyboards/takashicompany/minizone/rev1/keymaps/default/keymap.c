@@ -11,7 +11,8 @@ report_mouse_t mouse_rep;
 enum click_state {
     NONE = 0,
     WAIT_CLICK,
-    CLICKABLE
+    CLICKABLE,
+    CLICKING
 };
 
 enum custom_keycodes {
@@ -136,19 +137,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     if (keycode == KC_MY_BTN1)
     {
-        // report_mouse_t currentReport = pointing_device_get_report();
-        // uint8_t btn = 1 << (keycode - KC_MY_BTN1);
-        // if (record->event.pressed) {
-        //     currentReport.buttons |= btn;
-        //     //mouse_rep.buttons |= btn;
-        //     dprintf("hey");
-        // } else {
-        //     currentReport.buttons &= ~btn;
-        //     //mouse_rep.butt &= ~btn;
-        //     dprintf("hello");
-        // }
-        // pointing_device_set_report(currentReport);
-        // return false;
+        report_mouse_t currentReport = pointing_device_get_report();
+        uint8_t btn = 1 << (keycode - KC_MY_BTN1);
+        if (record->event.pressed) {
+            currentReport.buttons |= btn;
+            mouse_rep.buttons |= btn;
+            state = CLICKING;
+            dprintf("hey");
+        } else {
+            currentReport.buttons &= ~btn;
+            mouse_rep.buttons &= ~btn;
+            state = NONE;
+            layer_off(click_layer);
+            dprintf("hello");
+        }
+        pointing_device_set_report(currentReport);
+        return false;
     }
     else
     {
@@ -206,7 +210,7 @@ void matrix_scan_user() {
         int8_t x, y;
 
         read_paw3204(&stat, &x, &y);
-        mouse_rep.buttons = 0;
+        //mouse_rep.buttons = 0;
         mouse_rep.h       = 0;
         mouse_rep.v       = 0;
         mouse_rep.x       = y;
@@ -218,7 +222,10 @@ void matrix_scan_user() {
             
             pointing_device_set_report(mouse_rep);
 
-            if (state == WAIT_CLICK) {
+            if (state == CLICKING)
+            {
+
+            } else if (state == WAIT_CLICK) {
                 if (timer_elapsed(click_timer) > 50) {
                     layer_on(click_layer);
                     click_timer = timer_read();
@@ -242,7 +249,9 @@ void matrix_scan_user() {
         }
         else
         {
-            if (state == CLICKABLE) {
+            if (state == CLICKING) {
+
+            } else if (state == CLICKABLE) {
                 if (timer_elapsed(click_timer) > 1000) {
                     state = NONE;
                     layer_off(click_layer);
