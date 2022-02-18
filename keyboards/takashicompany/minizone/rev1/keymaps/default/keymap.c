@@ -8,16 +8,16 @@
 
 report_mouse_t mouse_rep;
 
-bool mouseStartFlag;
-uint16_t mouseStartTimer;
-
-bool mouseEndFlag;
-uint16_t mouseEndTimer;
-
 enum click_state {
     NONE = 0,
     WAIT_CLICK,
     CLICKABLE
+};
+
+enum custom_keycodes {
+    KC_MY_BTN1,
+    KC_MY_BTN2,
+    KC_MY_BTN3,
 };
 
 enum click_state state;
@@ -90,7 +90,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     LAYOUT(
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MS_BTN1, KC_MS_BTN2, KC_WH_U, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MY_BTN1, KC_MS_BTN2, KC_WH_U, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_WH_D, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
@@ -134,9 +134,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-    if (keycode ==  KC_MS_BTN1)
+    if (keycode == KC_MY_BTN1)
     {
-        dprintf("click: %d \n", record->event.pressed);
+        // report_mouse_t currentReport = pointing_device_get_report();
+        // uint8_t btn = 1 << (keycode - KC_MY_BTN1);
+        // if (record->event.pressed) {
+        //     currentReport.buttons |= btn;
+        //     //mouse_rep.buttons |= btn;
+        //     dprintf("hey");
+        // } else {
+        //     currentReport.buttons &= ~btn;
+        //     //mouse_rep.butt &= ~btn;
+        //     dprintf("hello");
+        // }
+        // pointing_device_set_report(currentReport);
+        // return false;
     }
     else
     {
