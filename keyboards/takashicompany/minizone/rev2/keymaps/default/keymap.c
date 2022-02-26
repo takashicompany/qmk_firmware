@@ -12,12 +12,13 @@ enum click_state {
     NONE = 0,
     WAIT_CLICK,
     CLICKABLE,
-    CLICKING
+    CLICKING,
+    SCROLLING
 };
 
 enum custom_keycodes {
     KC_MY_BTN1,
-    KC_MY_BTN2,
+    KC_MY_BTN2 = SAFE_RANGE,
     KC_MY_BTN3,
 };
 
@@ -91,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     LAYOUT(
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MY_BTN1, KC_MS_BTN2, KC_WH_U, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MY_BTN1, KC_MY_BTN2, KC_WH_U, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_WH_D, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
@@ -153,6 +154,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         pointing_device_set_report(currentReport);
         return false;
+    }
+    else if (keycode == KC_MY_BTN2)
+    {
+         if (record->event.pressed) {
+             dprintf("Scroll Start\n");
+             state = SCROLLING;
+         }
+         else
+         {
+            state = NONE;
+            layer_off(click_layer);
+         }
+         return false;
     }
     else
     {
@@ -216,14 +230,27 @@ void matrix_scan_user() {
         mouse_rep.x       = y;
         mouse_rep.y       = -x;
 
-        // dprintf("stat:0x%02x x:%4d y:%4d\n", stat, mouse_rep.x, mouse_rep.y);
+        
 
         if (stat & 0x80) {
-            
+            //dprintf("stat:0x%02x x:%4d y:%4d \n", stat, mouse_rep.x, mouse_rep.y);
+            dprintf("x:%4d y:%4d \n", mouse_rep.x,  mouse_rep.y);
             pointing_device_set_report(mouse_rep);
 
-            if (state == CLICKING)
+            if (state == SCROLLING)
             {
+                if (mouse_rep.y < 0)
+                {
+                    dprintf("WH_U");
+                    tap_code16(KC_WH_U);
+                }
+                else
+                {
+                    dprintf("WH_D");
+                    tap_code16(KC_WH_D);
+                }
+                
+            } else if (state == CLICKING) {
 
             } else if (state == WAIT_CLICK) {
                 if (timer_elapsed(click_timer) > 50) {
@@ -249,7 +276,7 @@ void matrix_scan_user() {
         }
         else
         {
-            if (state == CLICKING) {
+            if (state == CLICKING || SCROLLING) {
 
             } else if (state == CLICKABLE) {
                 if (timer_elapsed(click_timer) > 1000) {
