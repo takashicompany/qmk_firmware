@@ -36,6 +36,10 @@ uint16_t click_timer;
 
 // enum scroll_direction
 int16_t scroll_v_counter;
+int16_t scroll_h_counter;
+
+int16_t scroll_v_threshold = 35;
+int16_t scroll_h_threshold = 35;
 
 uint16_t click_layer = 9;
 
@@ -144,6 +148,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void off_mouse(void) {
     state = NONE;
     layer_off(click_layer);
+    scroll_v_counter = 0;
+    scroll_h_counter = 0;
 }
 
 // #include <stdlib.h>しないために自前で絶対値を出す
@@ -295,16 +301,34 @@ void matrix_scan_user() {
                     break;
 
                 case SCROLLING:
-                    scroll_v_counter += mouse_rep.y;
 
-                    if (abs(scroll_v_counter) > 25) {
-                        if (scroll_v_counter < 0) {
-                            tap_code16(KC_WH_U);
-                        } else {
-                            tap_code16(KC_WH_D);
+                    if (abs(mouse_rep.y) * 2 > abs(mouse_rep.x)) {
+
+                        scroll_v_counter += mouse_rep.y;
+
+                        if (abs(scroll_v_counter) > scroll_v_threshold) {
+                            if (scroll_v_counter < 0) {
+                                tap_code16(KC_WH_U);
+                            } else {
+                                tap_code16(KC_WH_D);
+                            }
+                            scroll_v_counter = 0;
                         }
-                        scroll_v_counter = 0;
-                    }
+
+                    } else {
+
+                        scroll_h_counter += mouse_rep.x;
+
+                        if (abs(scroll_h_counter) > scroll_h_threshold) {
+                            if (scroll_h_counter < 0) {
+                                tap_code16(KC_WH_L);
+                            } else {
+                                tap_code16(KC_WH_R);
+                            }
+                            scroll_h_counter = 0;
+                        }
+
+                    } 
                     // if (mouse_rep.y < 0) {
                     //     dprintf("WH_U");
                     //     tap_code16(KC_WH_U);
