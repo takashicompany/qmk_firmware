@@ -99,7 +99,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     LAYOUT(
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MY_BTN1, KC_MY_SCR, KC_WH_U, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MY_BTN1, KC_MY_SCR, KC_MY_BTN2, KC_MY_BTN3, KC_MS_R,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_WH_D, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
@@ -135,6 +135,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //     RGB_M_K, RGB_M_X, RGB_M_G, RGB_M_T, RGB_M_T, KC_F11, KC_F12, KC_CAPS, KC_NO, KC_NO,
     //     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS)
 };
+
+void on_mouse(void) {
+    layer_on(click_layer);
+    click_timer = timer_read();
+    state = CLICKABLE;
+}
 
 void off_mouse(void) {
     state = NONE;
@@ -175,7 +181,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 currentReport.buttons &= ~btn;
                 mouse_rep.buttons &= ~btn;
-                off_mouse();
+                on_mouse();
             }
 
             pointing_device_set_report(currentReport);
@@ -283,9 +289,7 @@ void matrix_scan_user() {
 
                 case WAIT_CLICK:
                     if (timer_elapsed(click_timer) > 50) {
-                        layer_on(click_layer);
-                        click_timer = timer_read();
-                        state = CLICKABLE;
+                        on_mouse();
                     }
                     break;
 
