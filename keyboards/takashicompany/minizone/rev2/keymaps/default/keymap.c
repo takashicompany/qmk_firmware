@@ -23,18 +23,9 @@ enum custom_keycodes {
     KC_MY_SCR = SAFE_RANGE
 };
 
-// enum scroll_direction {
-//     NO = 0,
-//     UP = 1,
-//     DOWN = 2,
-//     LEFT = 3,
-//     RIGHT = 4
-// }
-
 enum click_state state;
 uint16_t click_timer;
 
-// enum scroll_direction
 int16_t scroll_v_counter;
 int16_t scroll_h_counter;
 
@@ -175,12 +166,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 currentReport.buttons |= btn;
                 mouse_rep.buttons |= btn;
                 state = CLICKING;
-                dprintf("hey");
             } else {
                 currentReport.buttons &= ~btn;
                 mouse_rep.buttons &= ~btn;
                 off_mouse();
-                dprintf("hello");
             }
 
             pointing_device_set_report(currentReport);
@@ -189,7 +178,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         case KC_MY_SCR:
             if (record->event.pressed) {
-                dprintf("Scroll Start\n");
                 state = SCROLLING;
             } else {
                 off_mouse();
@@ -205,50 +193,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
    
     return true;
-
-    // if (keycode == KC_MY_BTN1)
-    // {
-    //     report_mouse_t currentReport = pointing_device_get_report();
-    //     uint8_t btn = 1 << (keycode - KC_MY_BTN1);
-    //     if (record->event.pressed) {
-    //         currentReport.buttons |= btn;
-    //         mouse_rep.buttons |= btn;
-    //         state = CLICKING;
-    //         dprintf("hey");
-    //     } else {
-    //         currentReport.buttons &= ~btn;
-    //         mouse_rep.buttons &= ~btn;
-    //         state = NONE;
-    //         layer_off(click_layer);
-    //         dprintf("hello");
-    //     }
-    //     pointing_device_set_report(currentReport);
-    //     return false;
-    // }
-    // else if (keycode == KC_MY_BTN2)
-    // {
-    //      if (record->event.pressed) {
-    //          dprintf("Scroll Start\n");
-    //          state = SCROLLING;
-    //      }
-    //      else
-    //      {
-    //         state = NONE;
-    //         layer_off(click_layer);
-    //      }
-    //      return false;
-    // }
-    // else
-    // {
-    //     if  (record->event.pressed)
-    //     {
-    //         state = NONE;
-    //         layer_off(click_layer);
-    //     }
-    // }
-    // return true;
-
-
 }
 
 void keyboard_post_init_user(void) {
@@ -329,14 +273,6 @@ void matrix_scan_user() {
                         }
 
                     } 
-                    // if (mouse_rep.y < 0) {
-                    //     dprintf("WH_U");
-                    //     tap_code16(KC_WH_U);
-                    // } else {
-                    //     dprintf("WH_D");
-                    //     tap_code16(KC_WH_D);
-                    // }
-                    // break;
                     break;
 
                 case WAIT_CLICK:
@@ -351,32 +287,6 @@ void matrix_scan_user() {
                     click_timer = timer_read();
                     state = WAIT_CLICK;
             }
-
-            // if (state == SCROLLING)
-            // {
-            //     if (mouse_rep.y < 0)
-            //     {
-            //         dprintf("WH_U");
-            //         tap_code16(KC_WH_U);
-            //     }
-            //     else
-            //     {
-            //         dprintf("WH_D");
-            //         tap_code16(KC_WH_D);
-            //     }
-                
-            // } else if (state == CLICKING) {
-
-            // } else if (state == WAIT_CLICK) {
-            //     if (timer_elapsed(click_timer) > 50) {
-            //         layer_on(click_layer);
-            //         click_timer = timer_read();
-            //         state = CLICKABLE;
-            //     }
-            // } else {
-            //     click_timer = timer_read();
-            //     state = WAIT_CLICK;
-            // }
         }
         else
         {
@@ -395,17 +305,6 @@ void matrix_scan_user() {
                 default:
                     state = NONE;
             }
-
-            // if (state == CLICKING || SCROLLING) {
-
-            // } else if (state == CLICKABLE) {
-            //     if (timer_elapsed(click_timer) > 1000) {
-            //         state = NONE;
-            //         layer_off(click_layer);
-            //     }
-            // } else {
-            //     state = NONE;
-            // }
         }
     }
 }
