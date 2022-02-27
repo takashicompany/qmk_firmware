@@ -152,7 +152,13 @@ int16_t abs(int16_t num) {
     return num;
 }
 
+bool is_mouse_mode(void) {
+    return state == CLICKABLE || state == CLICKING || state == SCROLLING;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+    dprintf("col: %4d  row: %4d", record->event.key.col, record->event.key.row);
 
     switch (keycode) {
         case KC_MY_BTN1:
