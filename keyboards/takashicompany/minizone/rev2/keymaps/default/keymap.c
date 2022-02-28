@@ -262,13 +262,16 @@ void matrix_scan_user() {
 
                         scroll_v_counter += mouse_rep.y;
 
-                        if (abs(scroll_v_counter) > scroll_v_threshold) {
+                        while (abs(scroll_v_counter) > scroll_v_threshold) {
+
                             if (scroll_v_counter < 0) {
                                 tap_code16(KC_WH_U);
+                                scroll_v_counter += scroll_v_threshold;
                             } else {
                                 tap_code16(KC_WH_D);
+                                scroll_v_counter -= scroll_v_threshold;
                             }
-                            scroll_v_counter = 0;
+                            
                         }
 
                     } else {
@@ -278,8 +281,10 @@ void matrix_scan_user() {
                         if (abs(scroll_h_counter) > scroll_h_threshold) {
                             if (scroll_h_counter < 0) {
                                 tap_code16(KC_WH_L);
+                                scroll_h_counter -= scroll_h_threshold;
                             } else {
                                 tap_code16(KC_WH_R);
+                                scroll_h_counter += scroll_h_threshold;
                             }
                             scroll_h_counter = 0;
                         }
