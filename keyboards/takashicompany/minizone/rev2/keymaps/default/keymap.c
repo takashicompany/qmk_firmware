@@ -262,6 +262,7 @@ void matrix_scan_user() {
 
                 case SCROLLING:
                 {
+                    // TODO 既定値を超えた場合のハンドリング
                     int8_t rep_v = 0;
                     int8_t rep_h = 0;
                     if (abs(mouse_rep.y) * 2 > abs(mouse_rep.x)) {
