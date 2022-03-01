@@ -17,10 +17,10 @@ enum click_state {
 };
 
 enum custom_keycodes {
-    KC_MY_BTN1,
+    KC_MY_BTN1 = SAFE_RANGE,
     KC_MY_BTN2,
     KC_MY_BTN3,
-    KC_MY_SCR = SAFE_RANGE
+    KC_MY_SCR,
 };
 
 enum click_state state;
@@ -164,7 +164,7 @@ bool is_mouse_mode(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-    dprintf("col: %4d  row: %4d", record->event.key.col, record->event.key.row);
+    dprintf("col:%4d  row:%4d keycode: %d \n", record->event.key.col, record->event.key.row, keycode);
 
     switch (keycode) {
         case KC_MY_BTN1:
@@ -249,7 +249,7 @@ void matrix_scan_user() {
         
 
         if (stat & 0x80) {
-            dprintf("x:%4d y:%4d \n", mouse_rep.x,  mouse_rep.y);
+            //dprintf("x:%4d y:%4d \n", mouse_rep.x,  mouse_rep.y);
 
             if (state != SCROLLING) {
                 pointing_device_set_report(mouse_rep);
