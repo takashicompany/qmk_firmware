@@ -29,8 +29,8 @@ uint16_t click_timer;
 int16_t scroll_v_counter;
 int16_t scroll_h_counter;
 
-int16_t scroll_v_threshold = 35;
-int16_t scroll_h_threshold = 35;
+int16_t scroll_v_threshold = 30;
+int16_t scroll_h_threshold = 30;
 
 uint16_t click_layer = 9;
 
@@ -251,9 +251,9 @@ void matrix_scan_user() {
         if (stat & 0x80) {
             //dprintf("x:%4d y:%4d \n", mouse_rep.x,  mouse_rep.y);
 
-            if (state != SCROLLING) {
-                pointing_device_set_report(mouse_rep);
-            }
+            // if (state != SCROLLING) {
+            //     pointing_device_set_report(mouse_rep);
+            // }
 
             switch (state) {
                 case CLICKING:
@@ -261,39 +261,79 @@ void matrix_scan_user() {
                     break;
 
                 case SCROLLING:
-
+                {
+                    int8_t rep_v = 0;
+                    int8_t rep_h = 0;
                     if (abs(mouse_rep.y) * 2 > abs(mouse_rep.x)) {
 
                         scroll_v_counter += mouse_rep.y;
-
                         while (abs(scroll_v_counter) > scroll_v_threshold) {
-
                             if (scroll_v_counter < 0) {
-                                tap_code16(KC_WH_U);
+                                //tap_code16(KC_WH_U);
                                 scroll_v_counter += scroll_v_threshold;
+                                rep_v += scroll_v_threshold;
                             } else {
-                                tap_code16(KC_WH_D);
+                                //tap_code16(KC_WH_D);
                                 scroll_v_counter -= scroll_v_threshold;
+                                rep_v -= scroll_v_threshold;
                             }
                             
                         }
-
                     } else {
 
                         scroll_h_counter += mouse_rep.x;
 
-                        if (abs(scroll_h_counter) > scroll_h_threshold) {
+                        while (abs(scroll_h_counter) > scroll_h_threshold) {
                             if (scroll_h_counter < 0) {
-                                tap_code16(KC_WH_L);
-                                scroll_h_counter -= scroll_h_threshold;
-                            } else {
-                                tap_code16(KC_WH_R);
+                                // tap_code16(KC_WH_L);
                                 scroll_h_counter += scroll_h_threshold;
+                                rep_h += scroll_h_threshold;
+                            } else {
+                                // tap_code16(KC_WH_R);
+                                scroll_h_counter -= scroll_h_threshold;
+                                rep_h -= scroll_h_threshold;
                             }
-                            scroll_h_counter = 0;
                         }
+                    }
 
-                    } 
+                    mouse_rep.h = rep_h / 30;
+                    mouse_rep.v = -rep_v / 30;
+                    mouse_rep.x = 0;
+                    mouse_rep.y = 0;
+
+                    // if (abs(mouse_rep.y) * 2 > abs(mouse_rep.x)) {
+
+                    //     scroll_v_counter += mouse_rep.y;
+
+                    //     while (abs(scroll_v_counter) > scroll_v_threshold) {
+
+                    //         if (scroll_v_counter < 0) {
+                    //             tap_code16(KC_WH_U);
+                    //             scroll_v_counter += scroll_v_threshold;
+                    //         } else {
+                    //             tap_code16(KC_WH_D);
+                    //             scroll_v_counter -= scroll_v_threshold;
+                    //         }
+                            
+                    //     }
+
+                    // } else {
+
+                    //     scroll_h_counter += mouse_rep.x;
+
+                    //     if (abs(scroll_h_counter) > scroll_h_threshold) {
+                    //         if (scroll_h_counter < 0) {
+                    //             tap_code16(KC_WH_L);
+                    //             scroll_h_counter -= scroll_h_threshold;
+                    //         } else {
+                    //             tap_code16(KC_WH_R);
+                    //             scroll_h_counter += scroll_h_threshold;
+                    //         }
+                    //         scroll_h_counter = 0;
+                    //     }
+
+                    // } 
+                }
                     break;
 
                 case WAIT_CLICK:
@@ -306,6 +346,8 @@ void matrix_scan_user() {
                     click_timer = timer_read();
                     state = WAIT_CLICK;
             }
+
+            pointing_device_set_report(mouse_rep);
         }
         else
         {
