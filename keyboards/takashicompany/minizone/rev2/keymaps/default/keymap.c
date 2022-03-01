@@ -172,13 +172,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_MY_BTN3:
         {
             report_mouse_t currentReport = pointing_device_get_report();
+
+            // どこのビットを対象にするか
             uint8_t btn = 1 << (keycode - KC_MY_BTN1);
             
             if (record->event.pressed) {
+                // ビットORは演算子の左辺と右辺の同じ位置にあるビットを比較して、両方のビットのどちらかが「1」の場合に「1」にします。
                 currentReport.buttons |= btn;
                 mouse_rep.buttons |= btn;
                 state = CLICKING;
             } else {
+                // ビットANDは演算子の左辺と右辺の同じ位置にあるビットを比較して、両方のビットが共に「1」の場合だけ「1」にします。
                 currentReport.buttons &= ~btn;
                 mouse_rep.buttons &= ~btn;
                 on_mouse();
