@@ -296,8 +296,8 @@ void matrix_scan_user() {
                         }
                     }
 
-                    mouse_rep.h = rep_h / 30;
-                    mouse_rep.v = -rep_v / 30;
+                    mouse_rep.h = rep_h / scroll_h_threshold;
+                    mouse_rep.v = -rep_v / scroll_v_threshold;
                     mouse_rep.x = 0;
                     mouse_rep.y = 0;
 
