@@ -32,6 +32,8 @@ int16_t scroll_h_counter;
 int16_t scroll_v_threshold = 30;
 int16_t scroll_h_threshold = 30;
 
+int16_t after_click_lock_movement = 0;
+
 uint16_t click_layer = 9;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -181,6 +183,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 currentReport.buttons |= btn;
                 mouse_rep.buttons |= btn;
                 state = CLICKING;
+                after_click_lock_movement = 30;
             } else {
                 // ビットANDは演算子の左辺と右辺の同じ位置にあるビットを比較して、両方のビットが共に「1」の場合だけ「1」にします。
                 currentReport.buttons &= ~btn;
@@ -257,6 +260,12 @@ void matrix_scan_user() {
 
             switch (state) {
                 case CLICKING:
+                    after_click_lock_movement -= abs(mouse_rep.x) + abs(mouse_rep.y);
+
+                    if (after_click_lock_movement > 0) {
+                        mouse_rep.x = 0;
+                        mouse_rep.y = 0;
+                    }
 
                     break;
 
