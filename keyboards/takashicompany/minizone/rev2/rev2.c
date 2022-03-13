@@ -3,6 +3,8 @@
 
 #include "rev2.h"
 
+#ifdef OLED_ENABLE
+
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
     return OLED_ROTATION_270;
 }
@@ -20,7 +22,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     return process_record_user(keycode, record);
 }
 
-#ifdef OLED_ENABLE
 bool oled_task_kb(void) {
 
     if (!oled_task_user()) { return false; }
