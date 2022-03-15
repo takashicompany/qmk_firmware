@@ -10,7 +10,7 @@
 #define PRODUCT_ID   0x0021
 #define DEVICE_VER   0x0001
 #define MANUFACTURER takashicompany
-#define PRODUCT      miniZONE
+#define PRODUCT      miniZone
 
 /* key matrix size */
 #define MATRIX_ROWS 6
@@ -128,10 +128,6 @@
 //#define NO_ACTION_LAYER
 //#define NO_ACTION_TAPPING
 //#define NO_ACTION_ONESHOT
-
-/* disable these deprecated features by default */
-#define NO_ACTION_MACRO
-#define NO_ACTION_FUNCTION
 
 /* Bootmagic Lite key configuration */
 //#define BOOTMAGIC_LITE_ROW 0
