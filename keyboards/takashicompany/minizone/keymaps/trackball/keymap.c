@@ -259,6 +259,10 @@ void matrix_scan_user() {
             // }
 
             switch (state) {
+                case CLICKABLE:
+                    click_timer = timer_read();
+                    break;
+                
                 case CLICKING:
                     after_click_lock_movement -= abs(mouse_rep.x) + abs(mouse_rep.y);
 
