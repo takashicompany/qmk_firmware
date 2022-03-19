@@ -153,11 +153,15 @@ bool is_clickable_mode(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    
+    // BLE Micro Pro用の実装
+    /*
     bool continue_process = process_record_user_bmp(keycode, record);
     if (continue_process == false)
     {
         return false;
     }
+    */
     
     switch (keycode) {
         case KC_MY_BTN1:
