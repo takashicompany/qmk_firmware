@@ -6,15 +6,15 @@
 #include "config_common.h"
 
 /* USB Device descriptor parameter */
-#define VENDOR_ID    0xFEED
-#define PRODUCT_ID   0x0000
+#define VENDOR_ID    0x7463 // tc = takashicompany
+#define PRODUCT_ID   0x0022
 #define DEVICE_VER   0x0001
 #define MANUFACTURER takashicompany
-#define PRODUCT      houshazone
+#define PRODUCT      Houshazone
 
 /* key matrix size */
-#define MATRIX_ROWS 2
-#define MATRIX_COLS 3
+#define MATRIX_ROWS 8
+#define MATRIX_COLS 7
 
 /*
  * Keyboard Matrix Assignments
@@ -26,8 +26,8 @@
  *                  ROW2COL = ROW = Anode (+), COL = Cathode (-, marked on diode)
  *
  */
-#define MATRIX_ROW_PINS { D0, D5 }
-#define MATRIX_COL_PINS { F1, F0, B0 }
+#define MATRIX_ROW_PINS { F4, F5, F6, F7, B1, B3, B2, B6 }
+#define MATRIX_COL_PINS { D2, D4, C6, D7, E6, B4, B5 }
 #define UNUSED_PINS
 
 /* COL2ROW, ROW2COL */
@@ -36,7 +36,7 @@
 /*
  * Split Keyboard specific options, make sure you have 'SPLIT_KEYBOARD = yes' in your rules.mk, and define SOFT_SERIAL_PIN.
  */
-#define SOFT_SERIAL_PIN D0  // or D1, D2, D3, E6
+// #define SOFT_SERIAL_PIN D0  // or D1, D2, D3, E6
 
 //#define LED_NUM_LOCK_PIN B0
 //#define LED_CAPS_LOCK_PIN B1
