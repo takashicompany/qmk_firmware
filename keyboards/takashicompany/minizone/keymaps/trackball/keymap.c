@@ -194,13 +194,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 state = SCROLLING;
             } else {
-                disable_click_layer();
+                // disable_click_layer(); // スクロールキーを離したらクリックレイヤーを無効にする
+
+                enable_click_layer();   // スクロールキーを離した時に再度クリックレイヤーを有効にする
             }
          return false;
 
          default:
             if  (record->event.pressed) {
-                state = NONE;
                 disable_click_layer();
             }
         
