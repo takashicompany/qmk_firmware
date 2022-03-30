@@ -37,7 +37,7 @@ enum click_state {
 enum click_state state;     // 現在のクリック入力受付の状態
 uint16_t click_timer;       // タイマー。状態に応じて時間で判定する
 
-uint16_t to_clickable_time = 100;   // この秒数(千分の一秒)、WAITING状態ならクリックレイヤーが有効になる
+uint16_t to_clickable_time = 50;   // この秒数(千分の一秒)、WAITING状態ならクリックレイヤーが有効になる
 uint16_t to_reset_time = 1000; // この秒数(千分の一秒)、CLICKABLE状態ならクリックレイヤーが無効になる
 
 uint16_t click_layer = 9;   // マウス入力が可能になった際に有効になるレイヤー
