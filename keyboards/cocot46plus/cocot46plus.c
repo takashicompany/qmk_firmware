@@ -291,5 +291,39 @@ void oled_write_layer_state(void) {
     oled_write(buf3, false);
 }
 
+void oled_write_layer_state_mz(void) {
+
+    oled_write_P(PSTR(" "), false);
+    // int cpi = pointing_device_get_cpi();
+    int cpi = cpi_array[cocot_config.cpi_idx];
+    int scroll_div = scrl_div_array[cocot_config.scrl_div];
+    int angle = angle_array[cocot_config.rotation_angle];
+    
+    char buf1[5];
+    char buf2[3];
+    char buf3[4];
+    snprintf(buf1, 5, "%4d", cpi);
+    snprintf(buf2, 3, "%2d", scroll_div);
+    snprintf(buf3, 4, "%3d", angle);
+
+    int layer = get_highest_layer(layer_state | default_layer_state);
+
+    oled_write_P(PSTR("L:"), false);
+    oled_write(get_u8_str(layer, ' '), false);
+    
+    oled_write_P(PSTR(" /"), false);
+    if (cocot_get_scroll_mode()){
+        oled_write_P(PSTR("S"), false);
+    } else{
+        oled_write_P(PSTR("C"), false);
+    }
+    oled_write_P(PSTR("/"), false);
+    oled_write(buf1, false);
+    oled_write_P(PSTR("/"), false);
+    oled_write(buf2, false);
+    oled_write_P(PSTR("/"), false);
+    oled_write(buf3, false);
+}
+
 #endif
 
