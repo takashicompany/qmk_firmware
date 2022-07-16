@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 enum custom_keycodes {
-    KC_MY_BTN1 = SAFE_RANGE,
+    KC_MY_BTN1 = SCRL_IN + 1,
     KC_MY_BTN2,
     KC_MY_BTN3,
     KC_MY_SCR,
@@ -111,7 +111,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     
     LAYOUT(
-        KC_TRNS, RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO , KC_TRNS,
+        KC_TRNS, RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, ROT_L15, ROT_R15, KC_NO, KC_NO, KC_NO , KC_TRNS,
         KC_TRNS, RGB_M_P, RGB_M_B, RGB_M_R, RGB_M_SW, RGB_M_SN, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS,
         KC_TRNS, RGB_M_K, RGB_M_X, RGB_M_G, KC_NO, KC_NO, QK_BOOT, KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -306,7 +306,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 #ifdef OLED_ENABLE
 bool oled_task_user(void) {
     render_logo();
-    oled_write_layer_state();
+    oled_write_layer_state_mz();
     return false;
 }
 #endif
