@@ -5,10 +5,9 @@
 
 #include "config_common.h"
 
-#define MATRIX_COL_PINS \
-    { GP4 }
-#define MATRIX_ROW_PINS \
-    { GP5 }
+#define MATRIX_ROWS 1
+#define MATRIX_COLS 4
+
 #define DEBUG_MATRIX_SCAN_RATE
 
 #define QMK_WAITING_TEST_BUSY_PIN GP8

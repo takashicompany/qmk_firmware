@@ -7,6 +7,7 @@
  * Feature disable options
  *  These options are also useful to firmware size reduction.
  */
+#define OLED_DISPLAY_128X32
 #define I2C_DRIVER I2CD2
 #define I2C2_SDA_PIN GP6
 #define I2C2_SCL_PIN GP7
