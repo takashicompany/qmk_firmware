@@ -1,8 +1,5 @@
 # This file intentionally left blank
 
-MCU = RP2040
-BOOTLOADER = rp2040
-
 OLED_ENABLE = yes
 OLED_DRIVER = SSD1306
 
