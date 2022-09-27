@@ -1,5 +1,6 @@
 #include "meicb.h"
 
+#if OLED_ENABLE
 // Draw the QMK logo at the top left corner, clipping if it does not fit.
 static void test_logo(void) {
     uint8_t lines = oled_max_lines();
@@ -25,3 +26,4 @@ bool oled_task_kb(void) {
     return false;
 
 }
+#endif
