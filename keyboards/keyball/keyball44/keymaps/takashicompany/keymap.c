@@ -42,7 +42,8 @@ enum click_state {
 typedef union {
   uint32_t raw;
   struct {
-    int16_t to_clickable_time; // // この秒数(千分の一秒)、WAITING状態ならクリックレイヤーが有効になる。  For this number of seconds (milliseconds), if in WAITING state, the click layer is activated.
+    // int16_t to_clickable_time; // // この秒数(千分の一秒)、WAITING状態ならクリックレイヤーが有効になる。  For this number of seconds (milliseconds), if in WAITING state, the click layer is activated.
+    int16_t to_clickable_movement;
   };
 } user_config_t;
 
@@ -67,6 +68,7 @@ int16_t after_click_lock_movement = 0;      // クリック入力後の移動量
 int16_t mouse_record_threshold = 30;    // ポインターの動きを一時的に記録するフレーム数。 Number of frames in which the pointer movement is temporarily recorded.
 int16_t mouse_move_count_ratio = 5;     // ポインターの動きを再生する際の移動フレームの係数。 The coefficient of the moving frame when replaying the pointer movement.
 
+int16_t mouse_movement;
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     LAYOUT_universal(
@@ -127,7 +129,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 void eeconfig_init_user(void) {
     user_config.raw = 0;
-    user_config.to_clickable_time = 10;
+    user_config.to_clickable_movement = 20; // user_config.to_clickable_time = 10;
     eeconfig_update_user(user_config.raw);
 }
 
@@ -213,7 +215,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         
         case KC_TO_CLICKABLE_TIME_INC:
             if (record->event.pressed) {
-                user_config.to_clickable_time += 10;
+                user_config.to_clickable_movement += 5; // user_config.to_clickable_time += 10;
                 eeconfig_update_user(user_config.raw);
             }
             return false;
@@ -221,11 +223,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_TO_CLICKABLE_TIME_DEC:
             if (record->event.pressed) {
 
-                user_config.to_clickable_time -= 10;
+                user_config.to_clickable_movement -= 5; // user_config.to_clickable_time -= 10;
 
-                if (user_config.to_clickable_time < 10) {
-                    user_config.to_clickable_time = 10;
+                if (user_config.to_clickable_movement < 5)
+                {
+                    user_config.to_clickable_movement = 5;
                 }
+
+                // if (user_config.to_clickable_time < 10) {
+                //     user_config.to_clickable_time = 10;
+                // }
 
                 eeconfig_update_user(user_config.raw);
             }
@@ -307,7 +314,17 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
                 break;
 
             case WAITING:
+                /*
                 if (timer_elapsed(click_timer) > user_config.to_clickable_time) {
+                    enable_click_layer();
+                }
+                */
+
+                mouse_movement += my_abs(current_x) + my_abs(current_y);
+
+                if (mouse_movement >= user_config.to_clickable_movement)
+                {
+                    mouse_movement = 0;
                     enable_click_layer();
                 }
                 break;
@@ -315,6 +332,7 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
             default:
                 click_timer = timer_read();
                 state = WAITING;
+                mouse_movement = 0;
         }
     }
     else
@@ -361,6 +379,6 @@ void oledkit_render_info_user(void) {
     oled_write_P(PSTR("Layer:"), false);
     oled_write(get_u8_str(get_highest_layer(layer_state), ' '), false);
     oled_write_P(PSTR(" TCT:"), false);
-    oled_write_ln(get_u8_str(user_config.to_clickable_time, ' '), false);
+    oled_write_ln(get_u8_str(user_config.to_clickable_movement, ' '), false);
 }
 #endif
