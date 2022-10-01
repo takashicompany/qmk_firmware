@@ -35,8 +35,7 @@ make keyball/keyball44:takashicompany:flash
 |レイヤー変更しきい値増加|0x5DB3|トラックボールレイヤーを有効にするためのトラックボール必要移動量のしきい値を上げる。|
 
 設定値はOLED上に表示されます。  
-![IMG_2288](https://user-images.githubusercontent.com/4215759/193409514-c4b5b214-efa1-4ac8-bf06-c3d4938a1343.jpg)
-
+<img src="https://user-images.githubusercontent.com/4215759/193409514-c4b5b214-efa1-4ac8-bf06-c3d4938a1343.jpg" width="800px"/>
 
 ## その他
 
