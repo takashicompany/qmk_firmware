@@ -23,8 +23,7 @@ make keyball/keyball44:takashicompany:flash
 当ファームウェアはRemapに対応しております。  
 レイヤー数は8となります。
 
-<img src="https://user-images.githubusercontent.com/4215759/180040883-020505fd-9e27-468f-ae4c-ebdc705c51d3.png" width="800px"/>
-
+<img src="https://user-images.githubusercontent.com/4215759/193408416-3cded42f-4e86-4b70-ae23-8dc8f72fb64c.png" width="800px"/>
 
 |キー|Code(hex)|説明|
 |:--|:--|:--|
