@@ -129,7 +129,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 void eeconfig_init_user(void) {
     user_config.raw = 0;
-    user_config.to_clickable_movement = 20; // user_config.to_clickable_time = 10;
+    user_config.to_clickable_movement = 50; // user_config.to_clickable_time = 10;
     eeconfig_update_user(user_config.raw);
 }
 
