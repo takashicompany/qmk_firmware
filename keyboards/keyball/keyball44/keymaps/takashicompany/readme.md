@@ -23,7 +23,7 @@ make keyball/keyball44:takashicompany:flash
 当ファームウェアはRemapに対応しております。  
 レイヤー数は7となります。
 
-<img src="https://user-images.githubusercontent.com/4215759/193408416-3cded42f-4e86-4b70-ae23-8dc8f72fb64c.png" width="800px"/>
+<img src="https://user-images.githubusercontent.com/4215759/193408416-3cded42f-4e86-4b70-ae23-8dc8f72fb64c.png" width="600px"/>
 
 |キー|Code(hex)|説明|
 |:--|:--|:--|
@@ -35,7 +35,7 @@ make keyball/keyball44:takashicompany:flash
 |レイヤー変更しきい値増加|0x5DB3|トラックボールレイヤーを有効にするためのトラックボール必要移動量のしきい値を上げる。|
 
 設定値はOLED上に表示されます。  
-<img src="https://user-images.githubusercontent.com/4215759/193409514-c4b5b214-efa1-4ac8-bf06-c3d4938a1343.jpg" width="800px"/>
+<img src="https://user-images.githubusercontent.com/4215759/193409514-c4b5b214-efa1-4ac8-bf06-c3d4938a1343.jpg" width="600px"/>
 
 ## その他
 
