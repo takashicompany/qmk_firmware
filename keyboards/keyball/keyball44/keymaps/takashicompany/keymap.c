@@ -351,11 +351,13 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
 
              case WAITING:
                 if (timer_elapsed(click_timer) > 50) {
+                    mouse_movement = 0;
                     state = NONE;
                 }
                 break;
 
             default:
+                mouse_movement = 0;
                 state = NONE;
         }
     }
