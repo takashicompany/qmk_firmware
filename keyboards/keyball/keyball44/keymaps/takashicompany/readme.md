@@ -1,6 +1,6 @@
 # Keyball44 miniZoneファームウェア
 
-[miniZone](https://github.com/takashicompany/minizone)で開発したファームウェアの実装をcocot46plusに流用したものです。
+[miniZone](https://github.com/takashicompany/minizone)で開発したファームウェアの実装をKeyball44に流用したものです。
 
 https://user-images.githubusercontent.com/4215759/162611440-2bb0ec75-2dbf-48b8-8c0d-54c8666c1aff.mp4
 
