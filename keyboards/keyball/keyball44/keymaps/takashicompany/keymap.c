@@ -385,7 +385,9 @@ void oledkit_render_info_user(void) {
     
     oled_write_P(PSTR("Layer:"), false);
     oled_write(get_u8_str(get_highest_layer(layer_state), ' '), false);
-    oled_write_P(PSTR(" TCT:"), false);
-    oled_write_ln(get_u8_str(user_config.to_clickable_movement, ' '), false);
+    oled_write_P(PSTR(" MV:"), false);
+    oled_write(get_u8_str(mouse_movement, ' '), false);
+    oled_write_P(PSTR("/"), false);
+    oled_write(get_u8_str(user_config.to_clickable_movement, ' '), false);
 }
 #endif
