@@ -11,6 +11,12 @@
 /* disable debug print */
 //#define NO_DEBUG
 
+#define MATRIX_ROWS 4
+#define MATRIX_COLS 5 * 2
+
+#define MATRIX_ROW_PINS { GP3, GP4, GP2, GP1}
+#define MATRIX_COL_PINS { GP26, GP27, GP28, GP29, GP0 }
+
 /* disable print */
 //#define NO_PRINT
 

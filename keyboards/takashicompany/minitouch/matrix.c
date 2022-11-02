@@ -75,10 +75,11 @@ inline uint8_t matrix_rows(void) { return MATRIX_ROWS; }
 
 inline uint8_t matrix_cols(void) { return MATRIX_COLS; }
 
+/*
 bool matrix_is_modified(void) {
     if (debounce_active()) return false;
     return true;
-}
+}*/
 
 inline bool matrix_is_on(uint8_t row, uint8_t col) { return (matrix[row] & ((matrix_row_t)1 << col)); }
 
