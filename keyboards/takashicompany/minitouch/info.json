@@ -3,7 +3,6 @@
     "keyboard_name": "takashicompany/minitouch",
     "maintainer": "takashicompany",
     "bootloader": "rp2040",
-    "diode_direction": "COL2ROW",
     "features": {
         "bootmagic": true,
         "command": false,
@@ -14,16 +13,17 @@
     },
     "matrix_pins": {
         "cols": [
-            "C2",
-            "C2",
-            "C2",
-            "C2"
+            "GP26",
+            "GP27",
+            "GP28",
+            "GP29",
+            "GP0"
         ],
         "rows": [
-            "D1",
-            "D1",
-            "D1",
-            "D1"
+            "GP3",
+            "GP4",
+            "GP2",
+            "GP1"
         ]
     },
     "processor": "RP2040",
