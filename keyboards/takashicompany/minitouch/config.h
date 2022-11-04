@@ -17,6 +17,11 @@
 #define MATRIX_ROW_PINS { GP3, GP4, GP2, GP1}
 #define MATRIX_COL_PINS { GP26, GP27, GP28, GP29, GP0 }
 
+#define OLED_DISPLAY_128X32
+#define I2C_DRIVER I2CD2
+#define I2C1_SDA_PIN GP6
+#define I2C1_SCL_PIN GP7
+
 /* disable print */
 //#define NO_PRINT
 
