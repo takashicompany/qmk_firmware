@@ -17,9 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include QMK_KEYBOARD_H
-#include <stdio.h>
 #include "quantum.h"
-
 
 enum custom_keycodes {
     KC_MY_BTN1 = KEYBALL_SAFE_RANGE,
@@ -69,6 +67,7 @@ int16_t mouse_record_threshold = 30;    // ポインターの動きを一時的�
 int16_t mouse_move_count_ratio = 5;     // ポインターの動きを再生する際の移動フレームの係数。 The coefficient of the moving frame when replaying the pointer movement.
 
 int16_t mouse_movement;
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     LAYOUT_universal(
