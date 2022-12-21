@@ -23,7 +23,7 @@ extern ergoslit_config_t ergoslit_config;
 
 enum ergoslit_keycodes {
 
-    ERGOSLIT_SAFE_RANGE = SAFE_RANGE,
+    ERGOSLIT_KB_SAFE_RANGE = SAFE_RANGE,
     CPI_SW,
     SCRL_SW,
     ROT_R15,
@@ -31,7 +31,7 @@ enum ergoslit_keycodes {
     SCRL_MO,
     SCRL_TO,
     SCRL_IN,
-
+    ERGOSLIT_SAFE_RANGE,
 };
 
 #define CPI_SW USER00
