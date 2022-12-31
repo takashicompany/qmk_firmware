@@ -2,7 +2,7 @@
     "manufacturer": "takashicompany",
     "keyboard_name": "takashicompany/ergoslit",
     "maintainer": "takashicompany",
-    "bootloader": "atmel-dfu",
+    "bootloader": "caterina",
     "diode_direction": "COL2ROW",
     "features": {
         "bootmagic": true,
