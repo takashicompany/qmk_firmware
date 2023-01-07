@@ -1,6 +1,5 @@
 #include QMK_KEYBOARD_H
-
-// Defines the keycodes used by our macros in process_record_user
+#include <stdio.h>
 
 /////////////////////////////
 /// miniZoneの実装 ここから ///
@@ -13,7 +12,9 @@ enum custom_keycodes {
     KC_MY_BTN3,
     KC_MY_SCR,
     KC_TO_CLICKABLE_INC,
-    KC_TO_CLICKABLE_DEC
+    KC_TO_CLICKABLE_DEC,
+    KC_SCROLL_DIR_V,
+    KC_SCROLL_DIR_H,
 };
 
 
@@ -30,6 +31,8 @@ typedef union {
   struct {
     // int16_t to_clickable_time; // // この秒数(千分の一秒)、WAITING状態ならクリックレイヤーが有効になる。  For this number of seconds (milliseconds), if in WAITING state, the click layer is activated.
     int16_t to_clickable_movement;
+    bool mouse_scroll_v_reverse;
+    bool mouse_scroll_h_reverse;
   };
 } user_config_t;
 
@@ -54,11 +57,15 @@ int16_t after_click_lock_movement = 0;      // クリック入力後の移動量
 int16_t mouse_record_threshold = 30;    // ポインターの動きを一時的に記録するフレーム数。 Number of frames in which the pointer movement is temporarily recorded.
 int16_t mouse_move_count_ratio = 5;     // ポインターの動きを再生する際の移動フレームの係数。 The coefficient of the moving frame when replaying the pointer movement.
 
+const uint16_t ignore_disable_mouse_layer_keys[] = {KC_LGUI, KC_LCTL};   // この配列で指定されたキーはマウスレイヤー中に押下してもマウスレイヤーを解除しない
+
 int16_t mouse_movement;
 
 void eeconfig_init_user(void) {
     user_config.raw = 0;
-    user_config.to_clickable_movement = 50; // user_config.to_clickable_time = 10;
+    user_config.to_clickable_movement = 50;
+    user_config.mouse_scroll_v_reverse = false;
+    user_config.mouse_scroll_h_reverse = false;
     eeconfig_update_user(user_config.raw);
 }
 
@@ -126,8 +133,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 // ビットANDは演算子の左辺と右辺の同じ位置にあるビットを比較して、両方のビットが共に「1」の場合だけ「1」にします。
                 // Bit AND compares the bits in the same position on the left and right sides of the operator and sets them to "1" only if both bits are "1" together.
                 currentReport.buttons &= ~btn;
-                enable_click_layer();
             }
+
+            enable_click_layer();
 
             pointing_device_set_report(currentReport);
             pointing_device_send();
@@ -167,6 +175,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         
+        case KC_SCROLL_DIR_V:
+            if (record->event.pressed) {
+                user_config.mouse_scroll_v_reverse = !user_config.mouse_scroll_v_reverse;
+                eeconfig_update_user(user_config.raw);
+            }
+            return false;
+        
+        case KC_SCROLL_DIR_H:
+            if (record->event.pressed) {
+                user_config.mouse_scroll_h_reverse = !user_config.mouse_scroll_h_reverse;
+                eeconfig_update_user(user_config.raw);
+            }
+            return false;
+
         case ERGOSLIT:
             if (record->event.pressed) {
                 SEND_STRING("Ergoslit");
@@ -176,6 +198,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
          default:
             if  (record->event.pressed) {
+
+                for (int i = 0; i < sizeof(ignore_disable_mouse_layer_keys) / sizeof(ignore_disable_mouse_layer_keys[0]); i++)
+                {
+                    if (keycode == ignore_disable_mouse_layer_keys[i])
+                    {
+                        enable_click_layer();
+                        return false;
+                    }
+                }
+
                 disable_click_layer();
             }
         
@@ -242,8 +274,8 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
                     }
                 }
 
-                current_h = rep_h / scroll_h_threshold;
-                current_v = -rep_v / scroll_v_threshold;
+                current_h = rep_h / scroll_h_threshold * (user_config.mouse_scroll_h_reverse ? -1 : 1);
+                current_v = -rep_v / scroll_v_threshold * (user_config.mouse_scroll_v_reverse ? -1 : 1);
                 current_x = 0;
                 current_y = 0;
             }
@@ -348,7 +380,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     
     LAYOUT(
-        KC_TRNS, RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, CPI_SW, ROT_L15, ROT_R15, KC_NO, KC_NO, KC_TRNS,
+        KC_TRNS, RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, CPI_SW, ROT_L15, ROT_R15, KC_SCROLL_DIR_V, KC_SCROLL_DIR_H, KC_TRNS,
         KC_TRNS, RGB_M_P, RGB_M_B, RGB_M_R, RGB_M_SW, RGB_M_SN, KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS,
         KC_TRNS, RGB_M_K, RGB_M_X, RGB_M_G, KC_NO, KC_NO, QK_BOOT, KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
