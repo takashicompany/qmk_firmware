@@ -198,6 +198,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
          default:
             if  (record->event.pressed) {
+                
+                if (state == CLICKING || state == SCROLLING)
+                {
+                    enable_click_layer();
+                    return false;
+                }
 
                 for (int i = 0; i < sizeof(ignore_disable_mouse_layer_keys) / sizeof(ignore_disable_mouse_layer_keys[0]); i++)
                 {
