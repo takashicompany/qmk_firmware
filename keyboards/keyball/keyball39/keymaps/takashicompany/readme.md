@@ -1,6 +1,6 @@
 # Keyball39 miniZoneファームウェア
 
-[miniZone](https://github.com/takashicompany/minizone)で開発したファームウェアの実装をKeyball44に流用したものです。
+[miniZone](https://github.com/takashicompany/minizone)で開発したファームウェアの実装をKeyball39に流用したものです。
 
 https://user-images.githubusercontent.com/4215759/162611440-2bb0ec75-2dbf-48b8-8c0d-54c8666c1aff.mp4
 
@@ -15,7 +15,7 @@ https://user-images.githubusercontent.com/4215759/162611440-2bb0ec75-2dbf-48b8-8
 または、[当ブランチ](https://github.com/takashicompany/qmk_firmware/tree/keyball)を `git checkout` するかダウンロードした後に、以下のコマンドを実行することでファームウェアのビルドと書き込みが可能です。
 
 ```
-make keyball/keyball44:takashicompany:flash
+make keyball/keyball39:takashicompany:flash
 ```
 
 ## Remapでのマウスキーの書き込みについて
