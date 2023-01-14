@@ -1,22 +1,20 @@
-# Compacx
+# chon_chee/su120
 
-![image](https://github.com/takashicompany/compacx/blob/master/images/qmk.jpg?raw=true)
+![chon_chee/su120](imgur.com image replace me!)
 
-"Compacx" is a 35-key keyboard with an ISO enter key.
-It is the perfect size for a macro pad or a one-handed gaming keyboard.
-It can also be used as a split keyboard by combining two units.
+*A short description of the keyboard/project*
 
 * Keyboard Maintainer: [takashicompany](https://github.com/takashicompany)
-* Hardware Supported: PCB, Pro Micro
-* Hardware Availability: https://github.com/takashicompany/compacx
+* Hardware Supported: *The PCBs, controllers supported*
+* Hardware Availability: *Links to where you can find this hardware*
 
 Make example for this keyboard (after setting up your build environment):
 
-    make takashicompany/compacx:default
+    make chon_chee/su120:default
 
 Flashing example for this keyboard:
 
-    make takashicompany/compacx:default:flash
+    make chon_chee/su120:default:flash
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
 
