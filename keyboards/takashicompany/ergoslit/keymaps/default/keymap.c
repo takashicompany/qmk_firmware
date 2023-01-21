@@ -2,14 +2,14 @@
 
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
-    RADIALEX = SAFE_RANGE,
+    ERGOSLIT = SAFE_RANGE,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     
     LAYOUT(
         KC_ESC, LT(7, KC_Q), KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC,
-        KC_LCTL, KC_A, KC_S, LT(6, KC_D), KC_F, KC_G, RADIALEX, KC_H, KC_J, LT(6, KC_K), KC_L, KC_ENT, KC_ENT,
+        KC_LCTL, KC_A, KC_S, LT(6, KC_D), KC_F, KC_G, ERGOSLIT, KC_H, KC_J, LT(6, KC_K), KC_L, KC_ENT, KC_ENT,
         KC_LSFT, LSFT_T(KC_Z), LGUI_T(KC_X), KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, LCTL_T(KC_DOT), KC_BSPC, KC_DEL,
         KC_LCTL, KC_LGUI, LALT_T(KC_LANG2), LSFT_T(KC_TAB), LT(2, KC_SPC), LT(1, KC_LANG1), KC_RALT, KC_RGUI
     ),
@@ -23,14 +23,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     
     LAYOUT(
         KC_TRNS ,KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, LGUI(KC_JYEN), KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_LCBR, KC_QUES, KC_UNDS, LSFT(KC_RO), KC_TRNS, KC_COLN, KC_DQUO, KC_RCBR, LSFT(KC_NUHS), LSFT(KC_JYEN), KC_TRNS,
+        KC_TRNS, KC_PLUS, KC_LCBR, KC_QUES, KC_UNDS, LSFT(KC_RO), KC_TRNS, KC_COLN, KC_DQUO, KC_RCBR, LSFT(KC_NUHS), LSFT(KC_JYEN), KC_TRNS,
         KC_TRNS, KC_TRNS, KC_LGUI, KC_LALT, KC_LANG2, KC_LSFT, KC_SPC, KC_LANG1, KC_TRNS, KC_TRNS, KC_DEL, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
     
     LAYOUT(
         KC_TRNS, LT(7, KC_Q), KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_TRNS,
-        KC_TRNS, KC_A, KC_S, LT(6, KC_D), KC_F, KC_G, RADIALEX, KC_H, KC_J, LT(6, KC_K), KC_L, KC_ENT, KC_TRNS,
+        KC_TRNS, KC_A, KC_S, LT(6, KC_D), KC_F, KC_G, ERGOSLIT, KC_H, KC_J, LT(6, KC_K), KC_L, KC_ENT, KC_TRNS,
         KC_TRNS, LSFT_T(KC_Z), LGUI_T(KC_X), KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, LCTL_T(KC_DOT), KC_BSPC, KC_TRNS,
         KC_LCTL, KC_LGUI, LALT_T(KC_LANG2), LSFT_T(KC_TAB), LT(5, KC_SPC), LT(4, KC_LANG1), KC_RALT, KC_RGUI
     ),
@@ -73,9 +73,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case RADIALEX:
+        case ERGOSLIT:
             if (record->event.pressed) {
-                SEND_STRING("Radialex");
+                SEND_STRING("Ergoslit");
                 rgblight_toggle();
             }
             return false;
