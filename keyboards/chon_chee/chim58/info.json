@@ -4,7 +4,7 @@
     "maintainer": "takashicompany",
     "usb": {
         "vid": "0x7463",
-        "pid": "0x9000",
+        "pid": "0x8000",
         "device_version": "0.0.1"
     }
 }
