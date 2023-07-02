@@ -1,21 +1,3 @@
-/*
-Copyright 2022 @Yowkees
-Copyright 2022 MURAOKA Taro (aka KoRoN, @kaoriya)
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #include QMK_KEYBOARD_H
 #include "quantum.h"
 
@@ -29,7 +11,7 @@ enum custom_keycodes {
     KC_MY_BTN3,
     KC_MY_SCR,
     KC_TO_CLICKABLE_INC,
-    KC_TO_CLICKABLE_DEC
+    KC_TO_CLICKABLE_DEC,
 };
 
 
@@ -39,6 +21,12 @@ enum click_state {
     CLICKABLE,  // マウスレイヤー有効になりクリック入力が取れる。 Mouse layer is enabled to take click input.
     CLICKING,   // クリック中。 Clicking.
     SCROLLING   // スクロール中。 Scrolling.
+};
+
+enum {
+    SINGLE_TAP = 1,
+    SINGLE_HOLD = 2,
+    DOUBLE_TAP = 3,
 };
 
 typedef union {
@@ -57,7 +45,7 @@ uint16_t click_timer;       // タイマー。状態に応じて時間で判定�
 // uint16_t to_clickable_time = 50;   // この秒数(千分の一秒)、WAITING状態ならクリックレイヤーが有効になる。  For this number of seconds (milliseconds), if in WAITING state, the click layer is activated.
 uint16_t to_reset_time = 1000; // この秒数(千分の一秒)、CLICKABLE状態ならクリックレイヤーが無効になる。 For this number of seconds (milliseconds), the click layer is disabled if in CLICKABLE state.
 
-const uint16_t click_layer = 6;   // マウス入力が可能になった際に有効になるレイヤー。Layers enabled when mouse input is enabled
+const uint16_t click_layer = 4;   // マウス入力が可能になった際に有効になるレイヤー。Layers enabled when mouse input is enabled
 
 int16_t scroll_v_mouse_interval_counter;   // 垂直スクロールの入力をカウントする。　Counting Vertical Scroll Inputs
 int16_t scroll_h_mouse_interval_counter;   // 水平スクロールの入力をカウントする。  Counts horizontal scrolling inputs.
@@ -71,6 +59,69 @@ int16_t mouse_record_threshold = 30;    // ポインターの動きを一時的�
 int16_t mouse_move_count_ratio = 5;     // ポインターの動きを再生する際の移動フレームの係数。 The coefficient of the moving frame when replaying the pointer movement.
 
 int16_t mouse_movement;
+
+typedef struct {
+  bool is_press_action;
+  int state;
+} tap;
+
+enum {
+  TD_LOWLNG = 0
+};
+
+int dance_lang (qk_tap_dance_state_t *state) {
+  if (state->count == 1) {
+    if (!state->pressed) return SINGLE_TAP;
+    else return SINGLE_HOLD;
+  }
+  else if (state->count == 2) {
+    return DOUBLE_TAP;
+  }
+  else return 6;
+}
+
+static tap xtap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+void x_finished_1 (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_state.state = dance_lang(state);
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        register_code(KC_F13);
+        register_code(KC_LANG2);
+        break;
+    case SINGLE_HOLD:
+        layer_on(1);
+        break;
+    case DOUBLE_TAP:
+        register_code(KC_F16);
+        register_code(KC_LANG1);
+        break;
+  }
+}
+
+void x_reset_1 (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        unregister_code(KC_F13);
+        unregister_code(KC_LANG2);
+        break;
+    case SINGLE_HOLD:
+        layer_off(1);
+        break;
+    case DOUBLE_TAP:
+        unregister_code(KC_F16);
+        unregister_code(KC_LANG1);
+        break;
+  }
+  xtap_state.state = 0;
+}
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+  [TD_LOWLNG] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, x_finished_1, x_reset_1)
+};
 
 void eeconfig_init_user(void) {
     user_config.raw = 0;
@@ -121,7 +172,7 @@ bool is_clickable_mode(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    
+
     switch (keycode) {
         case KC_MY_BTN1:
         case KC_MY_BTN2:
@@ -131,7 +182,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
             // どこのビットを対象にするか。 Which bits are to be targeted?
             uint8_t btn = 1 << (keycode - KC_MY_BTN1);
-            
+
             if (record->event.pressed) {
                 // ビットORは演算子の左辺と右辺の同じ位置にあるビットを比較して、両方のビットのどちらかが「1」の場合に「1」にします。
                 // Bit OR compares bits in the same position on the left and right sides of the operator and sets them to "1" if either of both bits is "1".
@@ -157,7 +208,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 enable_click_layer();   // スクロールキーを離した時に再度クリックレイヤーを有効にする。 Enable click layer again when the scroll key is released.
             }
          return false;
-        
+
         case KC_TO_CLICKABLE_INC:
             if (record->event.pressed) {
                 user_config.to_clickable_movement += 5; // user_config.to_clickable_time += 10;
@@ -183,16 +234,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
 
-         default:
+        default:
             if  (record->event.pressed) {
                 disable_click_layer();
             }
-        
+
     }
-   
+
     return true;
 }
-
 
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     int16_t current_x = mouse_report.x;
@@ -201,7 +251,7 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     int16_t current_v = 0;
 
     if (current_x != 0 || current_y != 0) {
-        
+
         switch (state) {
             case CLICKABLE:
                 click_timer = timer_read();
@@ -234,7 +284,7 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
                             scroll_v_mouse_interval_counter -= scroll_v_threshold;
                             rep_v -= scroll_v_threshold;
                         }
-                        
+
                     }
                 } else {
 
@@ -322,7 +372,7 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
 void oledkit_render_info_user(void) {
     keyball_oled_render_keyinfo();
     keyball_oled_render_ballinfo();
-    
+
     oled_write_P(PSTR("Layer:"), false);
     oled_write(get_u8_str(get_highest_layer(layer_state), ' '), false);
     oled_write_P(PSTR(" MV:"), false);
@@ -335,56 +385,41 @@ void oledkit_render_info_user(void) {
 /////////////////////////////
 /// miniZoneの実装 ここまで ///
 ////////////////////////////
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     LAYOUT_universal(
-        KC_ESC, LT(4, KC_Q), KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC,
-        KC_LCTL, KC_A, KC_S, LT(3, KC_D), KC_F, KC_G, KC_H, KC_J, LT(3, KC_K), KC_L, KC_ENT, KC_ENT,
-        KC_LSFT, LSFT_T(KC_Z), LGUI_T(KC_X), KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, LCTL_T(KC_DOT), KC_BSPC, KC_BSPC, 
-        KC_LSFT, KC_LCTL, KC_LGUI, LALT_T(KC_LANG2), LSFT_T(KC_TAB), LT(2, KC_SPC), LT(1, KC_LANG1), LT(1, KC_LANG1), KC_RGUI, KC_RCTL
+        KC_ESC, LT(4, KC_Q), KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_MINS,
+        KC_TAB, KC_A, KC_S, LT(3, KC_D), KC_F, KC_G, KC_H, KC_J, LT(3, KC_K), KC_L, KC_SCLN, KC_QUOT,
+        KC_LSFT, MT(MOD_LALT, KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_EQL,
+        KC_LCTL, KC_LALT, KC_LGUI, TD(TD_LOWLNG), LT(3, KC_SPACE), LT(3, KC_ENT), LT(2, KC_BSPC), KC_TRNS, KC_TRNS, KC_TRNS
     ),
-    
+
     LAYOUT_universal(
-        KC_TRNS, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_TRNS,
-        KC_TRNS, LCTL_T(KC_EQL), KC_LBRC, KC_SLSH, KC_MINS, KC_RO, KC_SCLN, KC_QUOT, KC_RBRC, KC_NUHS, KC_JYEN, KC_TRNS,
-        KC_TRNS, LSFT_T(KC_PLUS), KC_LCBR, KC_QUES, KC_UNDS, LSFT(KC_RO), KC_COLN, KC_DQUO, KC_RCBR, LSFT(KC_NUHS), LSFT(KC_JYEN),  KC_TRNS,
+        KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12,
+        S(KC_GRV), S(KC_1), S(KC_2), S(KC_3), S(KC_4), S(KC_5), S(KC_6), S(KC_7), S(KC_8), S(KC_9), S(KC_0), S(KC_BSLS),
+        KC_GRV, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_BSLS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
-    
+
     LAYOUT_universal(
-        KC_TRNS, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, LGUI(KC_JYEN),  KC_TRNS,
-        KC_TRNS, KC_PLUS, KC_LCBR, KC_QUES, KC_UNDS, LSFT(KC_RO), KC_COLN, KC_DQUO, KC_RCBR, LSFT(KC_NUHS), LSFT(KC_JYEN),  KC_TRNS,
-        KC_TRNS, KC_LSFT, KC_LGUI, KC_LALT, KC_LANG2, KC_LSFT, KC_SPC, KC_LANG1, KC_TRNS, KC_TRNS, KC_DEL,  KC_TRNS,
+        KC_MPRV, KC_MSTP, KC_MNXT, KC_MUTE, KC_VOLD, KC_VOLU, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, S(KC_LBRC),  S(KC_RBRC),
+        KC_TRNS, KC_PLUS, KC_LCBR, KC_QUES, KC_BRID, KC_BRIU, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, KC_LBRC,  KC_RBRC,
+        KC_TRNS, KC_LSFT, KC_LGUI, KC_LALT, KC_LANG2, KC_LSFT, S(KC_7), S(KC_BSLS), S(KC_EQL), S(KC_MINS), S(KC_9),  S(KC_0),
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
-    
+
     LAYOUT_universal(
         KC_TRNS, KC_ESC, KC_TAB, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_UP, KC_NO, KC_NO, KC_TRNS,
         KC_TRNS, KC_LCTL, KC_TRNS, KC_QUES, KC_EXLM, KC_NO, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_TRNS,
         KC_TRNS, KC_LSFT, KC_LGUI, KC_LALT, KC_LANG2, KC_TRNS, KC_NO, KC_LANG1, KC_NO, KC_NO, KC_DEL, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
-    ), 
-    
-    LAYOUT_universal(
-        KC_TRNS, KC_NO, KC_TAB, KC_NO, KC_NO, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_TRNS,
-        KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_TRNS,
-        KC_TRNS, KC_LSFT, KC_NO, KC_NO, KC_NO, KC_TRNS, KC_TRNS, KC_TRNS, KC_NO, MO(5), MO(6), KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
-    
-    LAYOUT_universal(
-        KC_TRNS, RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, CPI_I100, CPI_D100, KC_TO_CLICKABLE_INC, KC_TO_CLICKABLE_DEC, KC_NO, KBC_SAVE,
-        KC_TRNS, RGB_M_P, RGB_M_B, RGB_M_R, RGB_M_SW, RGB_M_SN, CPI_I1K, CPI_D1K, KC_NO, KC_NO, KC_NO, KBC_RST,
-        KC_TRNS, RGB_M_K, RGB_M_X, RGB_M_G, KC_NO, KC_NO, RESET, KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
-    ), 
 
     LAYOUT_universal(
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_MY_BTN2, KC_MY_SCR, KC_MY_BTN1, KC_TRNS, KC_TRNS, KC_MY_BTN1, KC_MY_SCR, KC_MY_BTN3, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MY_BTN1, KC_MY_SCR, KC_MY_BTN3, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     )
-  
+
 };
