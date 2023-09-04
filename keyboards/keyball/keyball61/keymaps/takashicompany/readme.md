@@ -8,7 +8,7 @@ https://user-images.githubusercontent.com/4215759/162611440-2bb0ec75-2dbf-48b8-8
 
 ## ファームウェアの書き込み
 
-ファイルは[こちら](https://github.com/takashicompany/qmk_firmware/releases/download/keyball44%2Fv1/keyball_keyball44_takashicompany.hex)からダウンロードできます。
+ファイルは[こちら](https://github.com/takashicompany/qmk_firmware/releases/download/keyball44%2Fv1/keyball_keyball61_takashicompany.hex)からダウンロードできます。
 
 [Pro Micro Web Updater](https://sekigon-gonnoc.github.io/promicro-web-updater/index.html)や[QMK Toolbox](https://kbd.dailycraft.jp/claw44/buildguide/10_firmware/toolbox/)でファームウェアをPro Microに書き込んでください。
 
