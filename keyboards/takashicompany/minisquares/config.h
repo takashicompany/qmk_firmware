@@ -3,13 +3,13 @@
 
 #pragma once
 
-#define MATRIX_ROW_PINS { F4, F5, F6, F7 }
+#define MATRIX_ROW_PINS { F4, F5, F6 }
 #define MATRIX_COL_PINS { D4, C6, D7, E6, B4 }
-#define MATRIX_ROW_PINS_RIGHT { F4, F5, F6, F7 }
+#define MATRIX_ROW_PINS_RIGHT { F6, F5, F4 }
 #define MATRIX_COL_PINS_RIGHT { B4, E6, D7, C6, D4 }
 #define RGB_DI_PIN D3
-#    define RGBLED_NUM 10
-#    define RGBLED_SPLIT { 5, 5 }
+#    define RGBLED_NUM 14
+#    define RGBLED_SPLIT { 7, 7 }
 #    define RGBLIGHT_HUE_STEP 8
 #    define RGBLIGHT_SAT_STEP 8
 #    define RGBLIGHT_VAL_STEP 8
