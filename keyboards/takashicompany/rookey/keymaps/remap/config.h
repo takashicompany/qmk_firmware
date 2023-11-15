@@ -4,6 +4,3 @@
 #pragma once
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 32
-
-#define ENCODERS_CW_KEY  { { 0, 0 }}
-#define ENCODERS_CCW_KEY { { 0, 1 }}
