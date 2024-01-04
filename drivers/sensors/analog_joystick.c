@@ -114,10 +114,10 @@ report_analog_joystick_t analog_joystick_read(void) {
 
     if (timer_elapsed(lastCursor) > ANALOG_JOYSTICK_READ_INTERVAL) {    // 多分、指定のミリ秒経過したかを見て処理を走らせている
         lastCursor = timer_read();
-        // report.x   = axisToMouseComponent(ANALOG_JOYSTICK_X_AXIS_PIN, xOrigin, maxCursorSpeed);
-        // report.y   = axisToMouseComponent(ANALOG_JOYSTICK_Y_AXIS_PIN, yOrigin, maxCursorSpeed);
-        report.x = axisCoordinate_custom(ANALOG_JOYSTICK_X_AXIS_PIN, xOrigin) / 100;
-        report.y = axisCoordinate_custom(ANALOG_JOYSTICK_Y_AXIS_PIN, yOrigin) / 100;
+        report.x   = axisToMouseComponent(ANALOG_JOYSTICK_X_AXIS_PIN, xOrigin, maxCursorSpeed);
+        report.y   = axisToMouseComponent(ANALOG_JOYSTICK_Y_AXIS_PIN, yOrigin, maxCursorSpeed);
+        // report.x = axisCoordinate_custom(ANALOG_JOYSTICK_X_AXIS_PIN, xOrigin) / 100;
+        // report.y = axisCoordinate_custom(ANALOG_JOYSTICK_Y_AXIS_PIN, yOrigin) / 100;
     }
 #ifdef ANALOG_JOYSTICK_CLICK_PIN
     report.button = !readPin(ANALOG_JOYSTICK_CLICK_PIN);
