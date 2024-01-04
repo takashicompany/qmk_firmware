@@ -37,7 +37,7 @@ void keyboard_post_init_user(void) {
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     if (mouse_report.x != 0 || mouse_report.y != 0) {
         // 出力するコード
-        uprintf("X: %d, Y: %d\n", mouse_report.x, mouse_report.y);
+        // uprintf("X: %d, Y: %d\n", mouse_report.x, mouse_report.y);
     }
 
     return mouse_report;
