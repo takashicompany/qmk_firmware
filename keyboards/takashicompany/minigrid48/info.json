@@ -9,47 +9,20 @@
         "console": false,
         "extrakey": true,
         "mousekey": true,
-        "nkro": true,
-        "rgblight": true
+        "nkro": true
     },
     "matrix_pins": {
         "direct": [
             
-                ["GP4", "GP9", "GP13", "GP28", "GP26", "GP19"],
-                ["GP3", "GP8", "GP12", "GP27", "GP22", "GP18"],
-                ["GP2", "GP7", "GP11", "GP15", "GP21", "GP17"],
-                ["GP0", "GP5", "GP10", "GP14", "GP20", "GP16"]
+                ["GP5", "GP9", "GP13", "GP28", "GP26", "GP19"],
+                ["GP4", "GP8", "GP12", "GP27", "GP22", "GP18"],
+                ["GP3", "GP7", "GP11", "GP15", "GP21", "GP17"],
+                ["GP2", "GP6", "GP10", "GP14", "GP20", "GP16"]
             
         ]
     },
-    "rgblight": {
-        "led_count": 24,
-        "sleep": true,
-        "split": true,
-        "split_count": [12, 12],
-        "animations": {
-            "alternating": true,
-            "breathing": true,
-            "christmas": true,
-            "knight": true,
-            "rainbow_mood": true,
-            "rainbow_swirl": true,
-            "rgb_test": true,
-            "snake": true,
-            "static_gradient": true,
-            "twinkle": true
-        },
-        "hue_steps": 8,
-        "saturation_steps": 8,
-        "brightness_steps": 8,
-        "max_brightness": 255
-    },
     "split": {
         "enabled": true
-    },
-    "ws2812": {
-        "pin": "GP6",
-        "driver": "vendor"
     },
     "processor": "RP2040",
     "url": "",
