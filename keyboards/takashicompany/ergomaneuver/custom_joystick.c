@@ -41,7 +41,6 @@ void pointing_device_driver_init(void) {
 }
 report_mouse_t pointing_device_driver_get_report(report_mouse_t mouse_report) {
 
-
     if (timer_elapsed(lastCursor) > ANALOG_JOYSTICK_READ_INTERVAL) {    // 多分、指定のミリ秒経過したかを見て処理を走らせている
         lastCursor = timer_read();
         mouse_report.x = axisCoordinate_custom(ANALOG_JOYSTICK_X_AXIS_PIN, xOrigin) / joystick_ratio;
