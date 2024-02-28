@@ -1,3 +1,5 @@
+#pragma once
+
 #include "quantum.h"
 
 enum custom_keycodes_kb {
@@ -11,6 +13,5 @@ enum custom_keycodes_kb {
     KC_SCROLL_DIR_H,
     KC_OLED,
     KC_JS_INC,
-    KC_JS_DEC,
-    KC_SAVE,
+    KC_JS_DEC
 };

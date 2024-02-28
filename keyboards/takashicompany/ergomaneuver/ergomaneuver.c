@@ -43,7 +43,7 @@ uint16_t click_timer;       // タイマー。状態に応じて時間で判定�
 // uint16_t to_clickable_time = 50;   // この秒数(千分の一秒)、WAITING状態ならクリックレイヤーが有効になる。  For this number of seconds (milliseconds), if in WAITING state, the click layer is activated.
 uint16_t to_reset_time = 1000; // この秒数(千分の一秒)、CLICKABLE状態ならクリックレイヤーが無効になる。 For this number of seconds (milliseconds), the click layer is disabled if in CLICKABLE state.
 
-const uint16_t click_layer = 9;   // マウス入力が可能になった際に有効になるレイヤー。Layers enabled when mouse input is enabled
+const uint16_t click_layer = 8;   // マウス入力が可能になった際に有効になるレイヤー。Layers enabled when mouse input is enabled
 
 int16_t scroll_v_mouse_interval_counter;   // 垂直スクロールの入力をカウントする。　Counting Vertical Scroll Inputs
 int16_t scroll_h_mouse_interval_counter;   // 水平スクロールの入力をカウントする。  Counts horizontal scrolling inputs.
@@ -200,9 +200,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                 eeconfig_update_kb(user_config.raw);
             }
             
-            break;
-
-        case KC_SAVE:
             break;
 
          default:
