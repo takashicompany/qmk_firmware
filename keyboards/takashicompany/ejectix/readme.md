@@ -17,9 +17,12 @@ Make example for this keyboard (after setting up your build environment):
 
     make takashicompany/ejectix:default
     
+<<<<<<< HEAD
     or
     
     make takashicompany/ejectix:via
+=======
+>>>>>>> qmk/master
 
 Flashing example for this keyboard:
 
