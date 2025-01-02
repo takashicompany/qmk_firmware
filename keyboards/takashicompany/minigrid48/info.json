@@ -22,7 +22,10 @@
         ]
     },
     "split": {
-        "enabled": true
+        "enabled": true,
+        "serial": {
+            "driver": "vendor"
+        }
     },
     "processor": "RP2040",
     "url": "",
