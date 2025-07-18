@@ -46,3 +46,26 @@ SRC += lib/keyball/keyball.c
 # Disable other features to squeeze firmware size
 SPACE_CADET_ENABLE = no
 MAGIC_ENABLE = no
+
+# Combo settings
+COMBO_ENABLE = yes
+#ifdef COMBO_ENABLE
+enum combos{
+AS_SPACE,
+DG_N,
+JK_MS_BTN1,
+KL_MS_BTN2,
+};
+
+const uint16_t PROGMEM my_as[] = {KC_A, KC_S, COMBO_END};
+const uint16_t PROGMEM my_dg[] = {KC_D, KC_G, COMBO_END};
+const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM my_kl[] = {KC_K, KC_L, COMBO_END};
+
+combo_t key_combos[] = {
+[JQ_SPACE] = COMBO(my_as, KC_SPACE),
+[dg_n] = COMBO(my_js, KC_N),
+[JK_MS_BTN1] = COMBO(my_jk, MS_BTN1),
+[KL_MS_BTN2] = COMBO(my_kl, MS_BTN2),
+};
+#endif
